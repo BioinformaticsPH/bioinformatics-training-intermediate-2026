@@ -87,7 +87,9 @@ Everything you must change is commented with `CHANGE ME` / `YOUR_...` in the sou
           allow read: if true;
           allow create, update, delete: if request.auth != null
                         && request.auth.token.email in [
-                             "lhendrixbarboza@gmail.com"
+                             "lhendrixbarboza@gmail.com",
+                             "nikkiborj@gmail.com",
+                             "vjmulat@gmail.com"
                            ];
         }
      }

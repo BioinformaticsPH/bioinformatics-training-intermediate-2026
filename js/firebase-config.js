@@ -96,7 +96,9 @@ export const ANNOUNCEMENTS_COLLECTION = "announcements";
 export const ANNOUNCEMENT_MAX_LENGTH = 280;
 export const ANNOUNCEMENTS_LIMIT = 20;
 export const INSTRUCTOR_EMAILS = [
-  "lhendrixbarboza@gmail.com"
+  "lhendrixbarboza@gmail.com",
+  "nikkiborj@gmail.com",
+  "vjmulat@gmail.com"
 ];
 
 /* Shown in the banner when Firebase/Firestore is unavailable so the
