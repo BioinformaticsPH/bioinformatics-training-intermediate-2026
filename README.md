@@ -1,7 +1,8 @@
 # BI_TRAIN — Intermediate Plant Genome Bioinformatics Workshop 2026
 
-A single-page, serverless workshop website (HTML5 + Tailwind CSS via CDN + vanilla ES modules)
-with Firebase Google SSO and a real-time participant Q&A feed. All sessions are held
+A no-build, serverless workshop website (HTML5 + Tailwind CSS via CDN + vanilla ES modules)
+with Firebase Google SSO. It has a landing page (`index.html`) and a dedicated **Participant Q&A
+page** (`qa.html`) with a real-time question feed and threaded replies. All sessions are held
 **entirely in person (face-to-face)** — there is no virtual/online delivery. Designed to be
 deployed directly to **GitHub Pages** with no build step.
 
@@ -9,7 +10,8 @@ deployed directly to **GitHub Pages** with no build step.
 
 ```
 .
-├── index.html              # Markup: header, hero, 2x2 training grid, dashboard, footer
+├── index.html              # Landing page: header, hero, training grid, dashboard, footer
+├── qa.html                 # Participant Q&A: ask, filter, and reply in threads
 ├── .nojekyll               # Tells GitHub Pages to serve files as-is
 ├── css/
 │   └── style.css           # Flat minimalist theme, components, a11y helpers
@@ -17,27 +19,30 @@ deployed directly to **GitHub Pages** with no build step.
     ├── firebase-config.js  # Firebase project config + Drive link IDs
     ├── firebase.js         # Lazy Firebase singleton (loaded only when configured)
     ├── auth.js             # Google SSO + reactive user store
-    ├── questions.js        # Firestore submit + onSnapshot feed + GAS fallback
+    ├── site.js             # Shared shell (auth + header/profile) for every page
+    ├── questions.js        # Firestore submit + feed + threaded replies + GAS fallback
     ├── ui.js               # Nav, accordions (schedule + FAQ), lists
-    └── app.js              # Entry point / orchestration
+    ├── app.js              # Entry point for index.html
+    └── qa.js               # Entry point for qa.html
 ```
 
 ## Quick start
 
 The Firebase project config in `js/firebase-config.js` is already filled in, so **Google sign-in**
-and the **Firestore Q&A feed** are live (they need network access to Google's servers). No build
-step is required.
+and the **Firestore Q&A feed + replies** are live (they need network access to Google's servers).
+No build step is required.
 
 ```bash
 # from the project root
 python3 -m http.server 5173
-# open http://localhost:5173
+# open http://localhost:5173           (landing page)
+# open http://localhost:5173/qa.html   (participant Q&A)
 ```
 
 > **You must serve the site over HTTP(S).** Opening `index.html` directly (a `file://` URL)
-> makes the browser block `js/app.js` with a CORS error, so every JavaScript-rendered section
-> (schedule, materials, resources, FAQ and Q&A) appears **empty**. Always use a local server
-> (as above) or the deployed GitHub Pages URL — never open the file by double-clicking it.
+> makes the browser block the ES modules with a CORS error, so every JavaScript-rendered section
+> (schedule, materials, resources, FAQ, and the Q&A feed) appears **empty**. Always use a local
+> server (as above) or the deployed GitHub Pages URL — never open the file by double-clicking it.
 
 ## Going live — checklist
 
@@ -79,6 +84,19 @@ Everything you must change is commented with `CHANGE ME` / `YOUR_...` in the sou
                        && request.resource.data.question.size() >= 10
                        && request.resource.data.question.size() <= 500;
          allow update, delete: if false;
+
+         // Threaded replies — any signed-in participant may post;
+         // authors may edit or delete only their own reply.
+         match /replies/{replyId} {
+           allow read: if true;
+           allow create: if request.auth != null
+                         && request.resource.data.message is string
+                         && request.resource.data.message.size() >= 1
+                         && request.resource.data.message.size() <= 500
+                         && request.resource.data.email == request.auth.token.email;
+           allow update, delete: if request.auth != null
+                         && resource.data.email == request.auth.token.email;
+         }
        }
 
         // Organizer announcements — must match INSTRUCTOR_EMAILS
@@ -98,20 +116,34 @@ Everything you must change is commented with `CHANGE ME` / `YOUR_...` in the sou
 
    `js/firebase-config.js` auto-enables Firebase once `apiKey` no longer contains `YOUR_`.
 
-**Question fields & moderation.** Each `questions` document stores `user`, `email`, `avatar`,
-`question`, `category`, `status` and an optional `answer`:
+**Question fields.** Each `questions` document stores `user`, `email`, `avatar`, `question`,
+`category`, `status` and an optional `answer`:
 
 | Field | Meaning |
 | --- | --- |
 | `category` | One of `QUESTION_CATEGORIES` (default `General`); drives the feed filter pills. |
-| `status` | `pending` (default) or `answered`. May be omitted — an `answer` also marks it answered. |
-| `answer` | Optional instructor reply; shown beneath the question when present. |
+| `status` | `pending` (default) or `answered`. Legacy/console-only — see below. |
+| `answer` | Optional single instructor answer set via the Firebase console; shown beneath the question when present. |
 
-To mark a question answered, edit the document in the **Firebase console** and set
-`status: "answered"` (and optionally add an `answer` string). The app only **reads** these
-fields, so the security rules above (`allow update, delete: if false`) can stay unchanged.
-Adjust the pill list or the 150-char truncation threshold via `QUESTION_CATEGORIES` and
-`QUESTION_TRUNCATE_LENGTH` in `js/firebase-config.js`.
+**Threaded replies.** Discussion lives in a subcollection,
+`questions/{questionId}/replies/{replyId}`:
+
+| Field | Meaning |
+| --- | --- |
+| `message` | Reply text (1–500 chars, capped by `REPLY_MAX_LENGTH`). |
+| `user` / `email` / `avatar` | Author identity copied from the signed-in Google account. |
+| `timestamp` | Server timestamp; replies are ordered oldest → newest. |
+
+Any signed-in participant can post a reply; authors can edit or delete **their own** reply
+(the rules above enforce this). Threads are loaded **lazily** the first time a question's
+**Replies** control is expanded, then cached for the session. Replies reuse the same
+anti-spam cooldown as questions (`QUESTION_COOLDOWN_MS`, shared `bi_train_last_question` key).
+The legacy `status`/`answer` fields remain readable (e.g. answers set directly in the console)
+but are no longer written by the app.
+
+Adjust the pill list, the 150-char question truncation threshold, or the reply length via
+`QUESTION_CATEGORIES`, `QUESTION_TRUNCATE_LENGTH`, and `REPLY_MAX_LENGTH` in
+`js/firebase-config.js`.
 
 ### 1b. Organizer announcements
 
@@ -141,6 +173,7 @@ Ensure each item is shared as **“Anyone with the link → Viewer”**.
 
 If you prefer a Google Sheet over Firestore, deploy an Apps Script Web App and paste its `/exec`
 URL into `GAS_URL`. `questions.js` uses it automatically when Firestore is unavailable.
+**Note:** this fallback only accepts new questions — threaded replies require Firestore.
 
 ```js
 // Apps Script — Code.gs
@@ -174,9 +207,11 @@ The `.nojekyll` file ensures `js/` and `css/` are served unchanged.
 | Materials / Drive links | `MATERIALS` in `js/ui.js` + `DRIVE_LINKS` in `js/firebase-config.js` |
 | Resources | `RESOURCES` in `js/ui.js` |
 | FAQs | `FAQS` in `js/ui.js` |
-| Validation & anti-spam | `QUESTION_*` constants in `js/firebase-config.js` |
+| Participant Q&A page | `qa.html` + the `#qa` section inside it (header/footer are duplicated by design) |
+| Q&A feed, threads & reply UI | `js/questions.js` |
+| Validation, anti-spam & reply limits | `QUESTION_*` / `REPLY_*` constants in `js/firebase-config.js` |
 | Organizer allowlist & announcements | `INSTRUCTOR_EMAILS` / `ANNOUNCEMENT_*` in `js/firebase-config.js` |
-| Brand colours | `tailwind.config` in `index.html` + `:root` in `css/style.css` |
+| Brand colours | `tailwind.config` in `index.html` + `qa.html` + `:root` in `css/style.css` |
 
 ## Accessibility & performance
 

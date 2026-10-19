@@ -13,6 +13,8 @@ import { getCurrentUser, onUserChange } from "./auth.js";
 import { showToast, escapeHtml } from "./ui.js";
 import {
   QUESTIONS_COLLECTION,
+  REPLIES_SUBCOLLECTION,
+  REPLY_MAX_LENGTH,
   QUESTION_MIN_LENGTH,
   QUESTION_MAX_LENGTH,
   QUESTION_COOLDOWN_MS,
@@ -30,6 +32,13 @@ let unsubscribeFeed = null;
    applied client-side without re-fetching. */
 let allItems = [];
 let activeCategory = "All";
+
+/* Thread state — replies for each question are subscribed lazily the
+   first time its thread is expanded, then cached for the session. */
+const threadSubs = new Map(); // questionId -> onSnapshot unsubscribe
+const threadCache = new Map(); // questionId -> replies[]
+const openThreads = new Set(); // questionId with an expanded thread
+const editingReplies = new Set(); // replyId currently being edited
 
 /* ------------------------- Feed rendering ---------------------- */
 
@@ -97,18 +106,275 @@ function questionBody(q) {
 
 function answerBlock(q) {
   if (typeof q.answer !== "string" || !q.answer.trim()) return "";
+  const who = escapeHtml(q.answeredBy?.name || "Instructor");
+  const when = q.answeredAt
+    ? ` <span class="text-xs text-charcoal-soft/70">${escapeHtml(timeAgo(q.answeredAt))}</span>`
+    : "";
   return `
     <div class="qa-answer">
-      <span class="font-semibold text-forest"><i class="fa-solid fa-reply mr-1" aria-hidden="true"></i>Instructor:</span>
-      ${escapeHtml(q.answer)}
+      <span class="font-semibold text-forest"><i class="fa-solid fa-reply mr-1" aria-hidden="true"></i>${who}:</span>
+      ${escapeHtml(q.answer)}${when}
     </div>`;
+}
+
+/* ------------------------- Reply threads ----------------------- */
+
+function replyItem(r, qid) {
+  const me = getCurrentUser();
+  const mine = !!me && me.email && r.email === me.email;
+  const name = r.user || "Participant";
+  const avatar = r.avatar || initialsAvatar(name);
+  const editing = editingReplies.has(r.id);
+
+  const body = editing
+    ? `
+      <div class="qa-reply-edit">
+        <label class="sr-only" for="edit-${escapeHtml(r.id)}">Edit reply</label>
+        <textarea id="edit-${escapeHtml(r.id)}" rows="2" maxlength="${REPLY_MAX_LENGTH}"
+          data-reply-edit-input data-qid="${escapeHtml(qid)}" data-reply-id="${escapeHtml(r.id)}">${escapeHtml(r.message || "")}</textarea>
+        <div class="qa-reply-actions">
+          <button type="button" data-reply-cancel data-qid="${escapeHtml(qid)}" data-reply-id="${escapeHtml(r.id)}" class="qa-reply-btn qa-reply-btn-ghost">Cancel</button>
+          <button type="button" data-reply-save data-qid="${escapeHtml(qid)}" data-reply-id="${escapeHtml(r.id)}" class="qa-reply-btn qa-reply-btn-primary">Save</button>
+        </div>
+      </div>`
+    : `<p class="qa-reply-body break-words">${escapeHtml(r.message || "")}</p>`;
+
+  const actions = mine && !editing
+    ? `
+      <div class="qa-reply-editlinks">
+        <button type="button" data-reply-edit data-qid="${escapeHtml(qid)}" data-reply-id="${escapeHtml(r.id)}" class="qa-reply-link">Edit</button>
+        <button type="button" data-reply-delete data-qid="${escapeHtml(qid)}" data-reply-id="${escapeHtml(r.id)}" class="qa-reply-link qa-reply-link-danger">Delete</button>
+      </div>`
+    : "";
+
+  return `
+    <li class="qa-reply" data-reply-id="${escapeHtml(r.id)}">
+      <img class="qa-reply-avatar" src="${avatar}" alt="" />
+      <div class="min-w-0 flex-1">
+        <p class="qa-reply-meta">
+          <span class="font-semibold text-forest">${escapeHtml(name)}</span>
+          <span class="qa-reply-time">${escapeHtml(timeAgo(r.timestamp))}</span>
+          ${mine ? `<span class="qa-reply-you">You</span>` : ""}
+        </p>
+        ${body}
+        ${actions}
+      </div>
+    </li>`;
+}
+
+function replyComposer(qid) {
+  const user = getCurrentUser();
+  if (!user) {
+    return `<p class="qa-reply-signin"><i class="fa-solid fa-circle-info mr-1 text-leaf-dark" aria-hidden="true"></i>Sign in with Google to join the discussion.</p>`;
+  }
+  return `
+    <div class="qa-reply-composer" data-qid="${escapeHtml(qid)}">
+      <label class="sr-only" for="reply-${escapeHtml(qid)}">Write a reply</label>
+      <textarea id="reply-${escapeHtml(qid)}" rows="2" maxlength="${REPLY_MAX_LENGTH}"
+        data-reply-input data-qid="${escapeHtml(qid)}" placeholder="Write a reply…"></textarea>
+      <div class="qa-reply-actions">
+        <span data-reply-counter class="qa-reply-counter">0 / ${REPLY_MAX_LENGTH}</span>
+        <button type="button" data-reply-submit data-qid="${escapeHtml(qid)}" class="qa-reply-btn qa-reply-btn-primary">
+          <i class="fa-solid fa-reply" aria-hidden="true"></i> Reply
+        </button>
+      </div>
+    </div>`;
+}
+
+function renderThread(qid) {
+  const root = document.querySelector(`.qa-thread[data-thread-for="${CSS.escape(qid)}"]`);
+  if (!root) return;
+  const list = root.querySelector("[data-thread-list]");
+  const composer = root.querySelector("[data-thread-composer]");
+  const replies = threadCache.get(qid) || [];
+
+  if (list) {
+    list.innerHTML = replies.length
+      ? replies.map((r) => replyItem(r, qid)).join("")
+      : `<li class="qa-reply-empty">No replies yet — be the first to respond.</li>`;
+  }
+  if (composer) composer.innerHTML = replyComposer(qid);
+}
+
+function repliesSection(q) {
+  // GAS-fallback items have no Firestore id and cannot host a thread.
+  if (!q.id) return "";
+  const open = openThreads.has(q.id);
+  return `
+    <div class="qa-replies">
+      <button type="button" class="qa-replies-toggle" data-reply-toggle data-qid="${escapeHtml(q.id)}" aria-expanded="${open}">
+        <i class="fa-regular fa-comments" aria-hidden="true"></i>
+        <span class="qa-replies-label">Replies</span>
+        <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+      </button>
+      <div class="qa-thread${open ? "" : " hidden"}" data-thread-for="${escapeHtml(q.id)}">
+        <ul class="qa-thread-list" data-thread-list></ul>
+        <div data-thread-composer></div>
+      </div>
+    </div>`;
+}
+
+function repaintOpenThreads() {
+  openThreads.forEach((qid) => {
+    const root = document.querySelector(`.qa-thread[data-thread-for="${CSS.escape(qid)}"]`);
+    root?.classList.remove("hidden");
+    markReplyToggle(qid, true);
+    renderThread(qid);
+  });
+}
+
+function markReplyToggle(qid, open) {
+  const btn = document.querySelector(`.qa-replies-toggle[data-qid="${CSS.escape(qid)}"]`);
+  if (btn) btn.setAttribute("aria-expanded", String(open));
+}
+
+async function subscribeThread(qid) {
+  if (threadSubs.has(qid)) return;
+  const { db, enabled } = getFirebase();
+  if (!enabled || !db) {
+    threadCache.set(qid, threadCache.get(qid) || []);
+    renderThread(qid);
+    return;
+  }
+  // Reserve the slot before the async import so a double-click cannot
+  // attach two listeners to the same thread.
+  threadSubs.set(qid, null);
+  try {
+    const { collection, query, orderBy, onSnapshot } = await import("firebase/firestore");
+    const col = collection(db, QUESTIONS_COLLECTION, qid, REPLIES_SUBCOLLECTION);
+    const unsub = onSnapshot(
+      query(col, orderBy("timestamp", "asc")),
+      (snap) => {
+        threadCache.set(qid, snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+        renderThread(qid);
+      },
+      (err) => {
+        console.error("[questions] reply snapshot error:", err);
+        showToast("Could not load replies for this question.", "error");
+      }
+    );
+    threadSubs.set(qid, unsub);
+  } catch (err) {
+    console.error("[questions] reply subscribe failed:", err);
+    threadSubs.delete(qid);
+  }
+}
+
+function toggleThread(qid) {
+  const open = !openThreads.has(qid);
+  const root = document.querySelector(`.qa-thread[data-thread-for="${CSS.escape(qid)}"]`);
+  if (open) {
+    openThreads.add(qid);
+    root?.classList.remove("hidden");
+    markReplyToggle(qid, true);
+    subscribeThread(qid);
+    renderThread(qid);
+  } else {
+    openThreads.delete(qid);
+    root?.classList.add("hidden");
+    markReplyToggle(qid, false);
+  }
+}
+
+function updateReplyCounter(el) {
+  const composer = el.closest(".qa-reply-composer");
+  const counter = composer?.querySelector("[data-reply-counter]");
+  if (counter) counter.textContent = `${el.value.length} / ${REPLY_MAX_LENGTH}`;
+}
+
+async function submitReply(qid, textarea) {
+  const user = getCurrentUser();
+  if (!user) {
+    showToast("Please sign in with your participant Google account to reply.", "error");
+    return;
+  }
+  const text = (textarea?.value || "").trim();
+  if (!text) {
+    showToast("Please write a reply first.", "error");
+    return;
+  }
+  if (text.length > REPLY_MAX_LENGTH) {
+    showToast(`Replies must be under ${REPLY_MAX_LENGTH} characters.`, "error");
+    return;
+  }
+  const wait = cooldownRemaining();
+  if (wait > 0) {
+    showToast(`Please wait ${Math.ceil(wait / 1000)}s before posting again.`, "error");
+    return;
+  }
+
+  const { db, enabled } = getFirebase();
+  if (!enabled || !db) {
+    showToast("Replies are currently unavailable. Please try again later.", "error");
+    return;
+  }
+
+  textarea.disabled = true;
+  try {
+    const { collection, addDoc, serverTimestamp } = await import("firebase/firestore");
+    await addDoc(collection(db, QUESTIONS_COLLECTION, qid, REPLIES_SUBCOLLECTION), {
+      message: text,
+      user: user.displayName || "Participant",
+      email: user.email || "",
+      avatar: user.photoURL || "",
+      timestamp: serverTimestamp()
+    });
+    localStorage.setItem(COOLDOWN_KEY, String(Date.now()));
+    textarea.value = "";
+    showToast("Reply posted.", "success");
+  } catch (err) {
+    console.error("[questions] reply submit failed:", err);
+    showToast("Something went wrong posting your reply. Please try again.", "error");
+  } finally {
+    textarea.disabled = !getCurrentUser();
+  }
+}
+
+async function saveReply(qid, replyId, textarea) {
+  const text = (textarea?.value || "").trim();
+  if (!text) {
+    showToast("Reply cannot be empty.", "error");
+    return;
+  }
+  if (text.length > REPLY_MAX_LENGTH) {
+    showToast(`Replies must be under ${REPLY_MAX_LENGTH} characters.`, "error");
+    return;
+  }
+  const { db, enabled } = getFirebase();
+  if (!enabled || !db) return;
+  try {
+    const { doc, updateDoc } = await import("firebase/firestore");
+    await updateDoc(doc(db, QUESTIONS_COLLECTION, qid, REPLIES_SUBCOLLECTION, replyId), {
+      message: text,
+      editedAt: Date.now()
+    });
+    editingReplies.delete(replyId);
+    showToast("Reply updated.", "success");
+  } catch (err) {
+    console.error("[questions] reply edit failed:", err);
+    showToast("Could not update your reply. Please try again.", "error");
+  }
+}
+
+async function deleteReply(qid, replyId) {
+  const { db, enabled } = getFirebase();
+  if (!enabled || !db) return;
+  if (!window.confirm("Delete this reply? This cannot be undone.")) return;
+  try {
+    const { doc, deleteDoc } = await import("firebase/firestore");
+    await deleteDoc(doc(db, QUESTIONS_COLLECTION, qid, REPLIES_SUBCOLLECTION, replyId));
+    showToast("Reply deleted.", "info");
+  } catch (err) {
+    console.error("[questions] reply delete failed:", err);
+    showToast("Could not delete your reply. Please try again.", "error");
+  }
 }
 
 function feedItem(q) {
   const name = q.user || "Participant";
   const avatar = q.avatar || initialsAvatar(name);
   return `
-    <li class="question-item">
+    <li class="question-item"${q.id ? ` data-qid="${escapeHtml(q.id)}"` : ""}>
       <img class="question-avatar" src="${avatar}" alt="" />
       <div class="min-w-0 flex-1">
         <p class="flex items-center gap-2 text-sm">
@@ -118,6 +384,7 @@ function feedItem(q) {
         <p class="mt-1 flex flex-wrap items-center gap-1.5">${categoryBadge(q)}${statusBadge(q)}</p>
         ${questionBody(q)}
         ${answerBlock(q)}
+        ${repliesSection(q)}
       </div>
     </li>`;
 }
@@ -167,6 +434,7 @@ function renderFiltered() {
   }
 
   feed.innerHTML = items.map(feedItem).join("");
+  repaintOpenThreads();
 }
 
 function renderFeed(items) {
@@ -190,7 +458,7 @@ async function subscribeFirestore(db) {
 
   unsubscribeFeed = onSnapshot(
     q,
-    (snap) => renderFeed(snap.docs.map((d) => d.data())),
+    (snap) => renderFeed(snap.docs.map((d) => ({ id: d.id, ...d.data() }))),
     (err) => {
       console.error("[questions] snapshot error:", err);
       showToast("Could not load the question feed.", "error");
@@ -239,6 +507,8 @@ function applyAuthState(user) {
     updateCharCount();
   }
   void composer;
+  // Re-render so reply composers / "You" affordances track auth state.
+  renderFiltered();
 }
 
 /* ------------------------- Submission -------------------------- */
@@ -366,8 +636,49 @@ function populateCategoryOptions() {
   select.value = "General";
 }
 
-/* Delegated handler so toggles keep working after innerHTML re-renders. */
+/* Delegated handler so toggles and reply controls keep working after
+   innerHTML re-renders. */
 function onFeedClick(e) {
+  const replyToggle = e.target.closest("[data-reply-toggle]");
+  if (replyToggle) {
+    toggleThread(replyToggle.dataset.qid);
+    return;
+  }
+
+  const replySubmit = e.target.closest("[data-reply-submit]");
+  if (replySubmit) {
+    const ta = replySubmit.closest(".qa-reply-composer")?.querySelector("[data-reply-input]");
+    submitReply(replySubmit.dataset.qid, ta);
+    return;
+  }
+
+  const replySave = e.target.closest("[data-reply-save]");
+  if (replySave) {
+    const ta = replySave.closest(".qa-reply-edit")?.querySelector("[data-reply-edit-input]");
+    saveReply(replySave.dataset.qid, replySave.dataset.replyId, ta);
+    return;
+  }
+
+  const replyEdit = e.target.closest("[data-reply-edit]");
+  if (replyEdit) {
+    editingReplies.add(replyEdit.dataset.replyId);
+    renderThread(replyEdit.dataset.qid);
+    return;
+  }
+
+  const replyCancel = e.target.closest("[data-reply-cancel]");
+  if (replyCancel) {
+    editingReplies.delete(replyCancel.dataset.replyId);
+    renderThread(replyCancel.dataset.qid);
+    return;
+  }
+
+  const replyDelete = e.target.closest("[data-reply-delete]");
+  if (replyDelete) {
+    deleteReply(replyDelete.dataset.qid, replyDelete.dataset.replyId);
+    return;
+  }
+
   const btn = e.target.closest(".qa-toggle");
   if (!btn) return;
   const next = btn.getAttribute("aria-expanded") !== "true";
@@ -377,6 +688,11 @@ function onFeedClick(e) {
   const item = btn.closest(".question-item");
   item?.querySelector(".q-short")?.classList.toggle("hidden", next);
   item?.querySelector(".q-full")?.classList.toggle("hidden", !next);
+}
+
+function onFeedInput(e) {
+  const replyInput = e.target.closest("[data-reply-input]");
+  if (replyInput) updateReplyCounter(replyInput);
 }
 
 function onFiltersClick(e) {
@@ -402,17 +718,19 @@ export async function initQuestions() {
   });
 
   document.getElementById("question-feed")?.addEventListener("click", onFeedClick);
+  document.getElementById("question-feed")?.addEventListener("input", onFeedInput);
   document.getElementById("qa-filters")?.addEventListener("click", onFiltersClick);
 
   // React to auth changes.
   onUserChange(applyAuthState);
 
-  // Initial feed.
+  // Initial empty state: renders the "no questions yet" copy and hides
+  // the topic filter pills until the first snapshot arrives.
+  renderFeed([]);
+
   const { db, enabled } = getFirebase();
   if (enabled && db) {
     await subscribeFirestore(db);
-  } else {
-    renderFeed([]);
   }
 
   updateCharCount();

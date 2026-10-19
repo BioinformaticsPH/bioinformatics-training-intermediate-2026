@@ -67,6 +67,11 @@ export const gasEnabled = !/YOUR_GAS/.test(GAS_URL);
 /* Firestore collection name for participant questions */
 export const QUESTIONS_COLLECTION = "questions";
 
+/* Threaded replies live in a subcollection: questions/{id}/replies/{id}.
+   Any signed-in participant may post; authors may edit/delete their own. */
+export const REPLIES_SUBCOLLECTION = "replies";
+export const REPLY_MAX_LENGTH = 500;
+
 /* Validation / anti-spam settings */
 export const QUESTION_MIN_LENGTH = 10;
 export const QUESTION_MAX_LENGTH = 500;
