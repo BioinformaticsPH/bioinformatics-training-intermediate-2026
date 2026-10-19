@@ -187,14 +187,26 @@ directly over its REST API (your rules allow public reads).
 
 **Setup (once):**
 
-1. <https://script.google.com> → **New project** → paste the `Code.gs` below.
-2. **Project Settings → Script properties** → add
-   `FIREBASE_PROJECT_ID` = `bi-intermediate-training` and
-   `FIREBASE_API_KEY` = the public `apiKey` from `js/firebase-config.js`.
-3. Run **`install()`** from the editor — grant the Gmail prompt and it creates the 5-minute
-   trigger. (Run it once; then leave it alone.)
-4. Run **`testNotify()`** once to see a manual pass over your data.
-5. Publish the **updated rules** from §1 (the create rule now checks `email` and
+1. <https://script.google.com> → **New project** → rename it (e.g. `bi-train-qna-notify`) →
+   delete the default `myFunction` stub and paste the `Code.gs` below.
+2. **Project Settings** (gear, left rail) → **Script properties** → add both, then **Save**:
+
+   | Property | Value |
+   | --- | --- |
+   | `FIREBASE_PROJECT_ID` | `bi-intermediate-training` |
+   | `FIREBASE_API_KEY` | the `apiKey` in `js/firebase-config.js` (public — it ships with the page) |
+
+3. Toolbar function dropdown → select **`install()`** → **Run**.
+   - First run asks to authorize: *Review permissions* → your Google account →
+     **"Google hasn't verified this app"** → **Advanced → Go to … (unsafe)** → **Allow**.
+     (Scopes: outbound HTTP, Gmail, script triggers.)
+   - It throws on purpose if the script properties are missing — add them and re-run.
+   - It creates the `notifyReplies` trigger, **only when the project has none**; to re-create
+     a trigger, delete the old one under **Triggers** first.
+4. Left rail → **Triggers** (clock icon): confirm `notifyReplies` · *Time-driven* ·
+   *Every 5 minutes*.
+5. Run **`testNotify()`** once → **View → Executions** should log `notifyReplies OK`.
+6. Publish the **updated rules** from §1 (the create rule now checks `email` and
    `notifyByEmail`) — otherwise posts are rejected.
 
 To hide the tick, set `REPLY_NOTIFY_EMAIL = false` in `js/firebase-config.js`.
@@ -298,9 +310,33 @@ function doPost(e) {
 }
 ```
 
-`doPost` (job 2) is the **optional Sheet fallback** from the original design: only if you
-deploy a Web app and paste its `/exec` URL into `GAS_URL` does `questions.js` use it — and
-only when Firestore is unavailable. It never touches replies.
+**Optional — the Sheet fallback (`GAS_URL`).** `doPost` (job 2) only matters if you want
+questions mirrored to a spreadsheet when Firestore is unavailable; it never touches replies:
+
+1. **Deploy → New deployment →** (gear) **Web app** → *Execute as*: **Me**,
+   *Who has access*: **Anyone** → **Deploy** → copy the `/exec` URL.
+2. Paste it into `GAS_URL` (`js/firebase-config.js`) and push. (Unused otherwise — the email
+   feature reads Firestore directly.)
+
+**Verify end to end.** From one Google account, post a question with the tick on; from a
+second account, reply. The email arrives in ≤ ~5 minutes (the very first scheduled run can
+take up to ~1 hour), sent from the script owner's Gmail. Failures show up under
+**View → Executions**.
+
+**Quotas (free tier).** `MailApp` 100 recipients/day · `UrlFetchApp` 20,000 fetches/day ·
+6-minute max run · trigger every 5 minutes · at most `SEEN_MAX = 400` reply paths kept in
+the `seenReplies` script property (the dedupe list).
+
+**Troubleshooting.**
+
+| Symptom | Fix |
+| --- | --- |
+| `install()` throws *Set FIREBASE_PROJECT_ID…* | Add both script properties (step 2) and re-run. |
+| No trigger under **Triggers** | Re-run `install()`; if a stale trigger exists, delete it first — `install()` only creates one when the project has none. |
+| `Firestore 401 / 403 / 404` in Executions | Wrong `FIREBASE_API_KEY` / `FIREBASE_PROJECT_ID`, or the Firestore database was never created. |
+| No email arrives | Check the question really has `notifyByEmail: true`, that the replier isn't the author (self-replies are skipped), and read the Executions log; already-mailed replies sit in `seenReplies`. |
+| *"Google hasn't verified this app"* persists | Expected for a personal script — re-authorize with **Advanced → Go to (unsafe)**. |
+| Reply posted, email late | Scheduled runs can lag up to ~1 hour on the first pass; `testNotify()` forces a manual run. |
 
 ## Deploy to GitHub Pages
 
