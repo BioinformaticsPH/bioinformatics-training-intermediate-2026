@@ -106,7 +106,7 @@
         <nav aria-label="Primary" class="hidden lg:block">
           <ul class="flex items-center gap-1 text-sm font-medium">
             <li><a class="nav-link" href="#schedule" data-nav="schedule">Schedule</a></li>
-            <li><a class="nav-link" href="#sessions" data-nav="sessions">Sessions</a></li>
+            <li><a class="nav-link" href="#sessions" data-nav="sessions">Resources</a></li>
             <li><a class="nav-link" href="#materials" data-nav="materials">Materials</a></li>
             <li><a class="nav-link" href="#faq" data-nav="faq">FAQ</a></li>
             <li><a class="nav-link" href="#dashboard" data-nav="dashboard">My Dashboard</a></li>
@@ -150,7 +150,7 @@
       <nav id="mobile-nav" aria-label="Mobile" class="hidden pb-4 lg:hidden">
         <ul class="flex flex-col gap-1 text-sm font-medium">
           <li><a class="mobile-nav-link" href="#schedule" data-nav="schedule">Schedule</a></li>
-          <li><a class="mobile-nav-link" href="#sessions" data-nav="sessions">Sessions</a></li>
+          <li><a class="mobile-nav-link" href="#sessions" data-nav="sessions">Resources</a></li>
           <li><a class="mobile-nav-link" href="#materials" data-nav="materials">Materials</a></li>
           <li><a class="mobile-nav-link" href="#faq" data-nav="faq">FAQ</a></li>
           <li><a class="mobile-nav-link" href="#dashboard" data-nav="dashboard">My Dashboard</a></li>
@@ -197,8 +197,8 @@
             <dd class="mt-1 text-2xl font-bold text-white">5</dd>
           </div>
           <div>
-            <dt class="text-xs font-medium uppercase tracking-wider text-white/60">Datasets</dt>
-            <dd class="mt-1 text-2xl font-bold text-white">8</dd>
+            <dt class="text-xs font-medium uppercase tracking-wider text-white/60">Tools Covered</dt>
+            <dd class="mt-1 text-2xl font-bold text-white">9</dd>
           </div>
           <div>
             <dt class="text-xs font-medium uppercase tracking-wider text-white/60">Format</dt>
@@ -300,21 +300,29 @@
             <h4 class="flex items-center gap-2 text-sm font-bold text-forest">
               <i class="fa-solid fa-clipboard-check text-leaf-dark" aria-hidden="true"></i> Pre-Flight Checklist
             </h4>
-            <span id="preflight-count" class="rounded-full bg-white px-2.5 py-1 text-[0.7rem] font-semibold text-forest" aria-live="polite">0 of 3 ready</span>
+            <span id="preflight-count" class="rounded-full bg-white px-2.5 py-1 text-[0.7rem] font-semibold text-forest" aria-live="polite">0 of 5 ready</span>
           </div>
           <p class="mb-2 text-xs text-charcoal-soft">Day 0 &mdash; Pre-workshop Technical Setup. Tick each item before the first session.</p>
           <div class="space-y-1">
+            <label class="preflight-item">
+              <input type="checkbox" class="preflight-box" value="software" />
+              <span class="preflight-label text-sm text-charcoal-soft">Install the workshop tools (FastQC, fastp, bowtie2, SAMtools, VCFtools, IGV)</span>
+            </label>
             <label class="preflight-item">
               <input type="checkbox" class="preflight-box" value="wsl2" />
               <span class="preflight-label text-sm text-charcoal-soft">Verify WSL2 installs and launches correctly</span>
             </label>
             <label class="preflight-item">
-              <input type="checkbox" class="preflight-box" value="power" />
-              <span class="preflight-label text-sm text-charcoal-soft">Pack your laptop power adapter</span>
+              <input type="checkbox" class="preflight-box" value="dryrun" />
+              <span class="preflight-label text-sm text-charcoal-soft">Complete the WSL2 dry-run check by Oct 15</span>
             </label>
             <label class="preflight-item">
               <input type="checkbox" class="preflight-box" value="usb" />
-              <span class="preflight-label text-sm text-charcoal-soft">Confirm USB installer availability with the organisers</span>
+              <span class="preflight-label text-sm text-charcoal-soft">Confirm USB installer / dataset with the organisers</span>
+            </label>
+            <label class="preflight-item">
+              <input type="checkbox" class="preflight-box" value="group" />
+              <span class="preflight-label text-sm text-charcoal-soft">Know your working group assignment</span>
             </label>
           </div>
         </div>
@@ -415,6 +423,37 @@
               <ul id="question-feed" class="space-y-3"><!-- injected by js/questions.js --></ul>
             </div>
           </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ------------------ WORKSHOP 1 RECAP + TRAIN THE TRAINERS ------------------ -->
+    <div class="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
+      <section id="recap" class="card" aria-labelledby="recap-title">
+        <header class="card-header">
+          <span class="card-icon bg-leaf/20 text-forest"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i></span>
+          <div>
+            <h3 id="recap-title" class="card-title">Workshop 1 Recap (June)</h3>
+            <p class="card-subtitle">What we covered in the first run</p>
+          </div>
+        </header>
+        <div class="mt-6 rounded-xl border border-dashed border-sage bg-paper px-4 py-5 text-sm text-charcoal-soft">
+          <span class="inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-2.5 py-0.5 text-[0.68rem] font-bold uppercase tracking-wide text-amber-800"><i class="fa-solid fa-pen-ruler" aria-hidden="true"></i> TBD</span>
+          <p class="mt-2">Recap of the June Workshop 1 is coming soon &mdash; a summary of the topics covered and the outcomes from the first run.</p>
+        </div>
+      </section>
+
+      <section id="trainers" class="card" aria-labelledby="trainers-title">
+        <header class="card-header">
+          <span class="card-icon bg-sage-100 text-forest"><i class="fa-solid fa-chalkboard-user" aria-hidden="true"></i></span>
+          <div>
+            <h3 id="trainers-title" class="card-title">Train the Trainers</h3>
+            <p class="card-subtitle">Building local capacity for future sessions</p>
+          </div>
+        </header>
+        <div class="mt-6 rounded-xl border border-dashed border-sage bg-paper px-4 py-5 text-sm text-charcoal-soft">
+          <span class="inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-2.5 py-0.5 text-[0.68rem] font-bold uppercase tracking-wide text-amber-800"><i class="fa-solid fa-pen-ruler" aria-hidden="true"></i> TBD</span>
+          <p class="mt-2">Train-the-Trainers programme details coming soon &mdash; how participants and local staff can co-deliver future plant genome bioinformatics workshops.</p>
         </div>
       </section>
     </div>

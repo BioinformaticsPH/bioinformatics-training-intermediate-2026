@@ -26,6 +26,14 @@ const SCHEDULE = [
       "Technical foundation & software installations: FastQC, fastp, bowtie2, SAMtools, VCFtools, IGV",
       "WSL2 dry-run check",
       "USB installers & group assignments"
+    ],
+    reqs: [
+      "Software list with versions: FastQC, fastp, bowtie2, SAMtools, VCFtools, IGV",
+      "Installation documentation for every tool",
+      "WSL2 installation dry-run completed by Oct 15",
+      "USB with installer",
+      "Dataset on USB",
+      "Working group assignments"
     ]
   },
   {
@@ -42,6 +50,15 @@ const SCHEDULE = [
       "Afternoon — AI: genomic log & data interpretation (LLMs for error parsing and VCF summaries)",
       "Afternoon — Data governance & privacy (API vs local models such as Ollama)",
       "Afternoon — AI pitfalls & Git recovery live demo"
+    ],
+    reqs: [
+      "Hardware & environment validation: WSL2 dry-run check on participant machines before Day 1 (catch PATH or system issues early)",
+      "Demo data prep: tiny trimmed test file (~100-line FASTQ or ~20-record VCF) for the Git recovery demo",
+      "GitHub account for the version control exercises",
+      "Pre-written commands cheat sheet of working one-liners",
+      "AI platform account (choose at least one: Google Gemini, Anthropic Claude or Cursor)",
+      "Optional offline alternative: Ollama with llama3 or qwen2.5-coder pre-pulled",
+      "Offline USB drives with software packages, conda/mamba environments, cheat sheets and datasets"
     ]
   },
   {
@@ -56,6 +73,12 @@ const SCHEDULE = [
       "Morning — End-to-end workflow: FastQC (QC) → fastp (cleaning) → bowtie2 & SAMtools (alignment) → bcftools (variant calling)",
       "Afternoon — Hands-on: Integrative Genomics Viewer (IGV)",
       "Afternoon — Hands-on: SNP / marker discovery"
+    ],
+    reqs: [
+      "Dataset",
+      "Pipeline / workflow",
+      "Software",
+      "Cheat sheet"
     ]
   },
   {
@@ -70,6 +93,10 @@ const SCHEDULE = [
       "Candidate gene mapping & specialized bioinformatics tools",
       "Assays design & database exploration",
       "SnpEff variant annotation"
+    ],
+    reqs: [
+      "Dataset",
+      "Cheat sheet"
     ]
   },
   {
@@ -84,6 +111,9 @@ const SCHEDULE = [
       "Apply skills to participants' own plant genomic datasets",
       "Independent pipeline execution",
       "Train-the-Trainers session"
+    ],
+    reqs: [
+      "5 possible problems to work through with participants"
     ]
   }
 ];
@@ -121,7 +151,7 @@ const FAQS = [
   },
   {
     q: "What do I need to set up before Day 0?",
-    a: "No prior setup is required. Day 0 covers the technical foundation: installing FastQC, fastp, bowtie2, SAMtools, VCFtools and IGV, plus a WSL2 dry-run check, with USB installers provided on site."
+    a: "Bring a laptop and, if you can, the tools pre-installed — FastQC, fastp, bowtie2, SAMtools, VCFtools and IGV (versions are listed with the materials). A working WSL2 installation is required: complete the WSL2 dry-run check by Oct 15. Day 0 resolves any remaining environment or PATH issues on site, and USB installers are provided."
   },
   {
     q: "Do I need to install software locally?",
@@ -185,7 +215,7 @@ const ACCENT_CLASS = {
 /* Bioinformatics tool names highlighted as monospace badges inside the
    schedule descriptions. Matched case-insensitively after escaping so the
    surrounding text stays safe. */
-const TOOL_RE = /\b(WSL2|FastQC|fastp|bowtie2|SAMtools|VCFtools|IGV|bcftools|SnpEff)\b/gi;
+const TOOL_RE = /\b(WSL2|FastQC|fastp|bowtie2|SAMtools|VCFtools|IGV|bcftools|SnpEff|bedtools)\b/gi;
 
 function toolBadges(escaped) {
   return escaped.replace(
@@ -219,6 +249,16 @@ function renderSchedule() {
           <ul class="list-disc space-y-1 pl-5 text-sm text-charcoal-soft">
             ${s.details.map((d) => `<li>${toolBadges(escapeHtml(d))}</li>`).join("")}
           </ul>
+          ${
+            s.reqs?.length
+              ? `<div class="mt-3 rounded-lg border border-sage-100 bg-paper p-3">
+                   <p class="text-[11px] font-bold uppercase tracking-wide text-charcoal-soft">Requirements</p>
+                   <ul class="mt-1 list-disc space-y-0.5 pl-5 text-xs text-charcoal-soft">
+                     ${s.reqs.map((r) => `<li>${toolBadges(escapeHtml(r))}</li>`).join("")}
+                   </ul>
+                 </div>`
+              : ""
+          }
         </div>
       </div>
     </li>`

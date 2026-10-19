@@ -169,6 +169,8 @@ The `.nojekyll` file ensures `js/` and `css/` are served unchanged.
 | What | Where |
 | --- | --- |
 | Schedule (Day 0–4 curriculum) | `SCHEDULE` array in `js/ui.js` |
+| Per-day requirements | `reqs` array in each `SCHEDULE` entry (`js/ui.js`) |
+| Workshop 1 Recap / Train the Trainers | `#recap` / `#trainers` sections in `index.html` |
 | Materials / Drive links | `MATERIALS` in `js/ui.js` + `DRIVE_LINKS` in `js/firebase-config.js` |
 | Resources | `RESOURCES` in `js/ui.js` |
 | FAQs | `FAQS` in `js/ui.js` |
