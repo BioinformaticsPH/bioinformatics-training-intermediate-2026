@@ -1,0 +1,461 @@
+/* =================================================================
+   BI_TRAIN — custom stylesheet
+   Minimalist "Plant Genome Bioinformatics" theme.
+   Contains only what Tailwind utilities can't express cleanly:
+   reusable component classes, flat interaction states and
+   accessibility helpers. Brand tokens mirror tailwind.config
+   in index.html.
+   ================================================================= */
+
+:root {
+  --forest: #0b3c23;
+  --forest-700: #0f4a2c;
+  --leaf: #87c232;
+  --leaf-dark: #71a528;
+  --leaf-light: #a6d95f;
+  --sage: #d1dbce;
+  --sage-100: #e7eee4;
+  --sage-50: #f4f7f5;
+  --paper: #f4f7f5;
+  --charcoal: #1a2e22;
+  --charcoal-soft: #41544a;
+}
+
+/* ---------- Accessibility helpers ---------- */
+.skip-link {
+  position: fixed;
+  top: -100%;
+  left: 1rem;
+  z-index: 100;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0 0 0.75rem 0.75rem;
+  background: var(--forest);
+  color: #fff;
+  font-weight: 600;
+  transition: top 0.2s ease;
+}
+.skip-link:focus {
+  top: 0;
+}
+
+/* Consistent, visible keyboard focus everywhere */
+a:focus-visible,
+button:focus-visible,
+textarea:focus-visible,
+input:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--leaf-dark);
+  outline-offset: 2px;
+  border-radius: 0.375rem;
+}
+
+/* ---------- Navigation (light header theme) ---------- */
+.nav-link {
+  position: relative;
+  display: inline-block;
+  padding: 0.5rem 0.85rem;
+  border-radius: 0.5rem;
+  color: var(--charcoal-soft);
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+.nav-link:hover {
+  color: var(--forest);
+  background-color: var(--sage-50);
+}
+.nav-link[aria-current="true"] {
+  color: var(--forest);
+}
+.nav-link[aria-current="true"]::after {
+  content: "";
+  position: absolute;
+  left: 0.85rem;
+  right: 0.85rem;
+  bottom: 0.2rem;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--leaf);
+}
+
+.mobile-nav-link {
+  display: block;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  color: var(--charcoal-soft);
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+.mobile-nav-link:hover,
+.mobile-nav-link[aria-current="true"] {
+  color: var(--forest);
+  background-color: var(--sage-50);
+}
+
+/* ---------- Buttons (flat, single accent) ---------- */
+.btn-primary,
+.btn-outline,
+.btn-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.85rem 1.5rem;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.15s ease, border-color 0.2s ease;
+}
+.btn-primary {
+  color: var(--forest);
+  background-color: var(--leaf);
+}
+.btn-primary:hover {
+  background-color: var(--leaf-dark);
+  transform: translateY(-1px);
+}
+.btn-outline {
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background-color: transparent;
+}
+.btn-outline:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.55);
+}
+.btn-submit {
+  padding: 0.6rem 1.2rem;
+  font-size: 0.875rem;
+  color: #fff;
+  background-color: var(--forest);
+}
+.btn-submit:hover:not(:disabled) {
+  background-color: var(--forest-700);
+}
+.btn-submit:disabled,
+#submit-question:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* ---------- Cards (borderless, soft shadow, flat header) ---------- */
+.card {
+  border-radius: 1rem;
+  border: none;
+  background: #fff;
+  padding: 1.5rem;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 1px 3px rgba(16, 24, 40, 0.06);
+  transition: box-shadow 0.25s ease;
+  scroll-margin-top: 6rem;
+}
+.card:hover {
+  box-shadow: 0 4px 20px -8px rgba(11, 60, 35, 0.14);
+}
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--sage-100);
+}
+.card-icon {
+  display: grid;
+  place-items: center;
+  height: 2.75rem;
+  width: 2.75rem;
+  border-radius: 0.75rem;
+  font-size: 1.05rem;
+}
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--forest);
+}
+.card-subtitle {
+  font-size: 0.8rem;
+  color: var(--charcoal-soft);
+}
+
+/* ---------- Schedule timeline (accordion) ---------- */
+.schedule-day {
+  border-left: 2px solid var(--sage);
+  padding-left: 1rem;
+  position: relative;
+}
+.schedule-day::before {
+  content: "";
+  position: absolute;
+  left: -6px;
+  top: 1.15rem;
+  height: 10px;
+  width: 10px;
+  border-radius: 999px;
+  background: var(--leaf);
+  box-shadow: 0 0 0 3px rgba(135, 194, 50, 0.2);
+}
+.sched-trigger {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.4rem 0.25rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+}
+.sched-chevron {
+  color: var(--forest);
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+}
+.sched-trigger[aria-expanded="true"] .sched-chevron {
+  transform: rotate(180deg);
+}
+.sched-panel {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.3s ease;
+}
+.sched-panel[data-open="true"] {
+  max-height: 30rem;
+}
+.sched-panel-inner {
+  padding: 0.75rem 0.25rem 1.25rem;
+}
+
+/* ---------- Material rows (subtle icon + download arrow) ---------- */
+.material-row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  border-radius: 0.85rem;
+  border: 1px solid var(--sage-100);
+  padding: 0.75rem 0.9rem;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+.material-row:hover {
+  border-color: rgba(11, 60, 35, 0.25);
+  background-color: var(--sage-50);
+}
+
+/* ---------- Pre-Flight Checklist (Day 0 setup) ---------- */
+.preflight-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  border-radius: 0.6rem;
+  padding: 0.5rem 0.6rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.preflight-item:hover {
+  background-color: var(--sage-50);
+}
+.preflight-item input.preflight-box {
+  margin-top: 0.15rem;
+  height: 1.05rem;
+  width: 1.05rem;
+  flex-shrink: 0;
+  accent-color: var(--leaf-dark);
+  cursor: pointer;
+}
+.preflight-item.is-done {
+  color: var(--charcoal-soft);
+}
+.preflight-item.is-done .preflight-label {
+  text-decoration: line-through;
+  text-decoration-color: var(--leaf-dark);
+}
+
+/* ---------- FAQ accordion ---------- */
+.faq-item button.faq-trigger {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 0.25rem;
+  text-align: left;
+  font-weight: 600;
+  color: var(--forest);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.faq-trigger .faq-chevron {
+  transition: transform 0.25s ease;
+  color: var(--forest);
+  flex-shrink: 0;
+}
+.faq-trigger[aria-expanded="true"] .faq-chevron {
+  transform: rotate(180deg);
+}
+.faq-panel {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.3s ease;
+}
+.faq-panel[data-open="true"] {
+  max-height: 22rem;
+}
+.faq-panel-inner {
+  padding: 0 0.25rem 1rem;
+  font-size: 0.9rem;
+  color: var(--charcoal-soft);
+  line-height: 1.65;
+}
+
+/* ---------- Organizer announcements ---------- */
+.announce-banner {
+  border-radius: 1rem;
+  border: 1px solid #fcd34d; /* amber-300 */
+  border-left: 4px solid #f59e0b; /* amber-500 accent */
+  background: #fffbeb; /* amber-50 */
+  padding: 0.9rem 1rem;
+  box-shadow: 0 4px 20px -12px rgba(245, 158, 11, 0.5);
+}
+.announce-icon-btn {
+  display: inline-flex;
+  height: 1.75rem;
+  width: 1.75rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  border: none;
+  background: transparent;
+  color: #92400e; /* amber-800 */
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.announce-icon-btn:hover {
+  background: #fde68a; /* amber-200 */
+  color: #78350f; /* amber-900 */
+}
+.announce-item {
+  border-radius: 0.75rem;
+  border: 1px solid var(--sage-100);
+  background: #fff;
+  padding: 0.7rem 0.85rem;
+}
+
+/* ---------- Question feed ---------- */
+.question-item {
+  display: flex;
+  gap: 0.75rem;
+  border-radius: 0.85rem;
+  border: 1px solid var(--sage-100);
+  background: #fff;
+  padding: 0.85rem 0.95rem;
+}
+.question-avatar {
+  height: 2rem;
+  width: 2rem;
+  flex-shrink: 0;
+  border-radius: 999px;
+  object-fit: cover;
+  background: var(--sage-100);
+}
+
+/* Expandable long-question toggle */
+.qa-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.35rem;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--leaf-dark);
+  transition: color 0.2s ease;
+}
+.qa-toggle:hover {
+  color: var(--forest);
+  text-decoration: underline;
+}
+.qa-toggle .fa-chevron-down {
+  transition: transform 0.25s ease;
+}
+.qa-toggle[aria-expanded="true"] .fa-chevron-down {
+  transform: rotate(180deg);
+}
+.qa-full {
+  animation: qa-fade 0.22s ease;
+}
+@keyframes qa-fade {
+  from { opacity: 0; transform: translateY(-2px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Instructor reply block */
+.qa-answer {
+  margin-top: 0.5rem;
+  border-left: 3px solid var(--leaf);
+  border-radius: 0 0.5rem 0.5rem 0;
+  background: var(--sage-50);
+  padding: 0.5rem 0.7rem;
+  font-size: 0.8rem;
+  color: var(--charcoal-soft);
+}
+
+/* Filter pills */
+.qa-filter {
+  border-radius: 999px;
+  border: 1px solid var(--sage);
+  background: #fff;
+  padding: 0.25rem 0.7rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--charcoal-soft);
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.qa-filter:hover {
+  border-color: var(--forest);
+  color: var(--forest);
+}
+.qa-filter[aria-pressed="true"] {
+  border-color: var(--forest);
+  background: var(--forest);
+  color: #fff;
+}
+
+/* ---------- Toasts ---------- */
+.toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  border-radius: 0.85rem;
+  border: 1px solid var(--sage);
+  background: #fff;
+  padding: 0.9rem 1rem;
+  box-shadow: 0 4px 20px -8px rgba(11, 60, 35, 0.25);
+  transform: translateY(12px);
+  opacity: 0;
+  animation: toast-in 0.25s ease forwards;
+}
+.toast.toast-out {
+  animation: toast-out 0.25s ease forwards;
+}
+.toast-success { border-left: 4px solid var(--forest); }
+.toast-error { border-left: 4px solid #dc2626; }
+.toast-info { border-left: 4px solid var(--leaf-dark); }
+
+@keyframes toast-in {
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes toast-out {
+  to { transform: translateY(12px); opacity: 0; }
+}
+
+/* ---------- Respect reduced-motion preferences ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

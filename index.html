@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Intermediate Plant Genome Bioinformatics Workshop 2026 | BI_TRAIN</title>
+  <meta name="description" content="Intermediate Plant Genome Bioinformatics Workshop: in-person training on command-line bioinformatics, variant discovery, gene function analysis and data integration. Schedule, materials and participant Q&A." />
+  <meta name="theme-color" content="#0B3C23" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Intermediate Plant Genome Bioinformatics Workshop 2026" />
+  <meta property="og:description" content="In-person plant genome bioinformatics workshop — command line, variant discovery, gene function analysis and integration." />
+  <meta property="og:type" content="website" />
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>%F0%9F%8C%B1</text></svg>" />
+
+  <!-- ===================== STYLING (CDN) ===================== -->
+  <!-- Tailwind CSS via Play CDN. For production you may swap to a compiled build. -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    /* Tailwind design tokens for the minimalist "Plant Genome" theme.
+       CHANGE the hex values below to re-brand the whole site in one place. */
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            forest: {
+              DEFAULT: '#0B3C23',
+              900: '#082E1B',
+              700: '#0F4A2C',
+              600: '#155C37',
+              50: '#E8F1EA'
+            },
+            leaf: {
+              DEFAULT: '#87C232',
+              dark: '#71A528',
+              light: '#A6D95F',
+              50: '#F3F8E8'
+            },
+            sage: {
+              DEFAULT: '#D1DBCE',
+              100: '#E7EEE4',
+              50: '#F4F7F5'
+            },
+            charcoal: {
+              DEFAULT: '#1A2E22',
+              soft: '#41544A'
+            },
+            paper: '#F4F7F5'
+          },
+          fontFamily: {
+            sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif']
+          },
+          boxShadow: {
+            card: '0 1px 2px rgba(16, 24, 40, 0.04), 0 1px 3px rgba(16, 24, 40, 0.06)',
+            soft: '0 4px 20px -8px rgba(11, 60, 35, 0.14)'
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- FontAwesome icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" referrerpolicy="no-referrer" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" />
+
+  <!-- Custom styles -->
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Firebase v10 modular SDK (ESM). Bare specifiers are resolved by the import map below. -->
+  <script type="importmap">
+    {
+      "imports": {
+        "firebase/app": "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js",
+        "firebase/auth": "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js",
+        "firebase/firestore": "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"
+      }
+    }
+  </script>
+</head>
+
+<body class="bg-paper text-charcoal font-sans antialiased">
+  <!-- Skip link for keyboard/screen-reader users -->
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <!-- ============================================================= -->
+  <!-- HEADER                                                        -->
+  <!-- ============================================================= -->
+  <header id="site-header" class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-sage">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="flex h-16 items-center justify-between gap-4">
+        <!-- Brand -->
+        <a href="#top" class="flex items-center gap-3 shrink-0 group" aria-label="BI_TRAIN home">
+          <span class="grid h-10 w-10 place-items-center rounded-xl bg-forest text-white font-extrabold">
+            <i class="fa-solid fa-dna text-lg" aria-hidden="true"></i>
+          </span>
+          <span class="leading-tight">
+            <span class="block text-base font-extrabold tracking-wide text-forest">BI<span class="text-leaf-dark">_</span>TRAIN</span>
+            <span class="hidden text-[11px] font-medium text-charcoal-soft sm:block">Intermediate Plant Genome Bioinformatics Workshop</span>
+          </span>
+        </a>
+
+        <!-- Primary navigation -->
+        <nav aria-label="Primary" class="hidden lg:block">
+          <ul class="flex items-center gap-1 text-sm font-medium">
+            <li><a class="nav-link" href="#schedule" data-nav="schedule">Schedule</a></li>
+            <li><a class="nav-link" href="#sessions" data-nav="sessions">Sessions</a></li>
+            <li><a class="nav-link" href="#materials" data-nav="materials">Materials</a></li>
+            <li><a class="nav-link" href="#faq" data-nav="faq">FAQ</a></li>
+            <li><a class="nav-link" href="#dashboard" data-nav="dashboard">My Dashboard</a></li>
+          </ul>
+        </nav>
+
+        <!-- Right cluster: auth -->
+        <div class="flex items-center gap-2 sm:gap-3">
+          <!-- Auth: signed-out button -->
+          <button id="header-signin" type="button" class="hidden items-center gap-2 rounded-full bg-forest px-4 py-2 text-sm font-semibold text-white transition hover:bg-forest-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-leaf-dark">
+            <i class="fa-brands fa-google" aria-hidden="true"></i>
+            Sign in
+          </button>
+
+          <!-- Auth: signed-in profile dropdown -->
+          <div id="header-profile" class="relative hidden">
+            <button id="profile-toggle" type="button" class="flex items-center gap-2 rounded-full border border-sage bg-white py-1 pl-1 pr-3 text-charcoal transition hover:bg-sage-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-leaf-dark" aria-haspopup="menu" aria-expanded="false" aria-controls="profile-menu">
+              <img id="profile-avatar" src="" alt="" class="h-8 w-8 rounded-full border border-sage object-cover" />
+              <span id="profile-name" class="hidden max-w-[10rem] truncate text-sm font-semibold text-forest sm:inline"></span>
+              <i class="fa-solid fa-chevron-down text-xs text-charcoal-soft" aria-hidden="true"></i>
+            </button>
+            <div id="profile-menu" role="menu" class="absolute right-0 mt-2 hidden w-64 overflow-hidden rounded-xl border border-sage bg-white text-charcoal shadow-soft">
+              <div class="border-b border-sage-100 p-4">
+                <p id="menu-name" class="truncate text-sm font-semibold text-forest"></p>
+                <p id="menu-email" class="truncate text-xs text-charcoal-soft"></p>
+              </div>
+              <button id="logout-btn" type="button" role="menuitem" class="flex w-full items-center gap-3 px-4 py-3 text-left text-sm font-medium text-red-600 transition hover:bg-red-50">
+                <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Sign out
+              </button>
+            </div>
+          </div>
+
+          <!-- Mobile menu toggle -->
+          <button id="mobile-toggle" type="button" class="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-sage text-forest transition hover:bg-sage-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-leaf-dark lg:hidden" aria-expanded="false" aria-controls="mobile-nav" aria-label="Toggle navigation menu">
+            <i class="fa-solid fa-bars" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile navigation -->
+      <nav id="mobile-nav" aria-label="Mobile" class="hidden pb-4 lg:hidden">
+        <ul class="flex flex-col gap-1 text-sm font-medium">
+          <li><a class="mobile-nav-link" href="#schedule" data-nav="schedule">Schedule</a></li>
+          <li><a class="mobile-nav-link" href="#sessions" data-nav="sessions">Sessions</a></li>
+          <li><a class="mobile-nav-link" href="#materials" data-nav="materials">Materials</a></li>
+          <li><a class="mobile-nav-link" href="#faq" data-nav="faq">FAQ</a></li>
+          <li><a class="mobile-nav-link" href="#dashboard" data-nav="dashboard">My Dashboard</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ============================================================= -->
+  <!-- HERO (flat forest green, no overlays or background graphics)  -->
+  <!-- ============================================================= -->
+  <section id="top" class="relative isolate overflow-hidden bg-forest text-white">
+    <div class="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-28 lg:px-8 lg:py-32">
+      <div class="max-w-3xl">
+        <span class="inline-flex items-center gap-2 rounded-full border border-leaf/40 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-leaf-light">
+          <i class="fa-solid fa-seedling" aria-hidden="true"></i> Plant Genome Bioinformatics &middot; Intermediate &middot; 2026
+        </span>
+        <h1 class="mt-6 text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
+          Elevate Your <span class="text-leaf-light">Data Analysis</span> Skills
+        </h1>
+        <p class="mt-6 max-w-2xl text-base leading-relaxed text-sage sm:text-lg">
+          Hands-on, in-person plant genome bioinformatics training &mdash; command-line workflows,
+          variant discovery, gene function analysis and data integration. Join us face-to-face
+          and work through real plant genomic datasets alongside the instructors.
+        </p>
+
+        <div class="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
+          <a href="#schedule" class="btn-primary group">
+            <i class="fa-regular fa-calendar-days" aria-hidden="true"></i>
+            View Full Schedule
+            <i class="fa-solid fa-arrow-right text-xs transition group-hover:translate-x-0.5" aria-hidden="true"></i>
+          </a>
+          <a href="#materials" class="btn-outline">
+            <i class="fa-solid fa-folder-open" aria-hidden="true"></i>
+            Explore Materials
+          </a>
+        </div>
+
+        <!-- Quick stats -->
+        <dl class="mt-12 grid max-w-xl grid-cols-3 gap-6 border-t border-white/15 pt-8">
+          <div>
+            <dt class="text-xs font-medium uppercase tracking-wider text-white/60">Training Days</dt>
+            <dd class="mt-1 text-2xl font-bold text-white">5</dd>
+          </div>
+          <div>
+            <dt class="text-xs font-medium uppercase tracking-wider text-white/60">Datasets</dt>
+            <dd class="mt-1 text-2xl font-bold text-white">8</dd>
+          </div>
+          <div>
+            <dt class="text-xs font-medium uppercase tracking-wider text-white/60">Format</dt>
+            <dd class="mt-1 text-2xl font-bold text-white">In person</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================= -->
+  <!-- ORGANIZER ANNOUNCEMENTS (live broadcast banner)               -->
+  <!-- ============================================================= -->
+  <section id="announcements" class="bg-paper" aria-label="Organizer announcements">
+    <div class="mx-auto max-w-7xl px-4 pt-8 sm:px-6 lg:px-8">
+
+      <!-- Pinned / active notice (hidden until there is one) -->
+      <div id="announce-banner" class="announce-banner hidden">
+        <div class="flex items-start gap-3">
+          <span class="mt-0.5 inline-flex shrink-0 items-center gap-1.5 rounded-full bg-amber-400 px-2.5 py-1 text-[0.68rem] font-extrabold uppercase tracking-wide text-amber-950">
+            <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-red-600" aria-hidden="true"></span>
+            Live Announcement
+          </span>
+          <div id="announce-banner-body" class="min-w-0 flex-1">
+            <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+              <span id="announce-time" class="text-xs font-medium text-amber-900/70"></span>
+            </div>
+            <p id="announce-message" class="mt-1 break-words text-sm font-medium text-charcoal"></p>
+          </div>
+          <div class="flex shrink-0 items-center gap-1">
+            <button id="announce-collapse" type="button" class="announce-icon-btn" aria-expanded="true" aria-controls="announce-banner-body" aria-label="Collapse announcement">
+              <i class="fa-solid fa-chevron-up" aria-hidden="true"></i>
+            </button>
+            <button id="announce-dismiss" type="button" class="announce-icon-btn" aria-label="Dismiss announcement">
+              <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Organizer composer (visible only to allowlisted organizers) -->
+      <div id="announce-compose" class="hidden mt-4 rounded-2xl border border-amber-200 bg-amber-50/60 p-4 sm:p-5">
+        <h3 class="mb-2 flex items-center gap-2 text-sm font-bold text-forest">
+          <i class="fa-solid fa-bullhorn text-amber-600" aria-hidden="true"></i> Broadcast an announcement
+        </h3>
+        <label for="announce-input" class="sr-only">Announcement message</label>
+        <textarea id="announce-input" rows="2" maxlength="280"
+          placeholder="Type an update for participants (venue, schedule, links…)"
+          class="w-full resize-none rounded-xl border border-sage bg-white p-3 text-sm text-charcoal placeholder:text-charcoal-soft/60 focus:border-forest focus:outline-none focus:ring-2 focus:ring-forest/15"></textarea>
+        <div class="mt-2 flex flex-wrap items-center justify-between gap-3">
+          <label class="inline-flex items-center gap-2 text-xs font-medium text-charcoal-soft">
+            <input id="announce-pin" type="checkbox" class="h-4 w-4 accent-amber-500" checked />
+            Pin as live banner
+          </label>
+          <div class="flex items-center gap-3">
+            <span id="announce-count" class="text-xs text-charcoal-soft" aria-live="polite">0 / 280</span>
+            <button id="announce-submit" type="button" class="btn-submit focus-visible:ring-2 focus-visible:ring-leaf-dark focus-visible:ring-offset-2">
+              <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
+              <span>Post</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- History -->
+      <div id="announce-history" class="mt-4">
+        <h3 class="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-charcoal-soft">
+          <i class="fa-solid fa-clock-rotate-left text-amber-600" aria-hidden="true"></i> Announcement History
+        </h3>
+        <ul id="announce-list" class="space-y-2"><!-- injected by js/announcements.js --></ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================= -->
+  <!-- MAIN — 2x2 GRID                                               -->
+  <!-- ============================================================= -->
+  <main id="main" class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+    <div class="mb-10 max-w-2xl">
+      <h2 class="text-2xl font-bold tracking-tight text-forest sm:text-3xl">Training Hub</h2>
+      <p class="mt-3 text-charcoal-soft">Everything you need for the workshop &mdash; schedule, downloadable material, resources and participant Q&amp;A.</p>
+    </div>
+
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+      <!-- ------------------ CARD 1: SCHEDULE ------------------ -->
+      <section id="schedule" data-section="schedule" class="card" aria-labelledby="schedule-title">
+        <header class="card-header">
+          <span class="card-icon bg-leaf/20 text-forest"><i class="fa-regular fa-calendar-check" aria-hidden="true"></i></span>
+          <div>
+            <h3 id="schedule-title" class="card-title">Schedule</h3>
+            <p class="card-subtitle">In-person sessions &amp; key dates</p>
+          </div>
+        </header>
+
+        <!-- Pre-Flight Checklist (Day 0 setup) -->
+        <div id="preflight" class="mt-6 rounded-2xl border border-leaf/30 bg-leaf/5 p-4 sm:p-5">
+          <div class="mb-3 flex flex-wrap items-center justify-between gap-2">
+            <h4 class="flex items-center gap-2 text-sm font-bold text-forest">
+              <i class="fa-solid fa-clipboard-check text-leaf-dark" aria-hidden="true"></i> Pre-Flight Checklist
+            </h4>
+            <span id="preflight-count" class="rounded-full bg-white px-2.5 py-1 text-[0.7rem] font-semibold text-forest" aria-live="polite">0 of 3 ready</span>
+          </div>
+          <p class="mb-2 text-xs text-charcoal-soft">Day 0 &mdash; Pre-workshop Technical Setup. Tick each item before the first session.</p>
+          <div class="space-y-1">
+            <label class="preflight-item">
+              <input type="checkbox" class="preflight-box" value="wsl2" />
+              <span class="preflight-label text-sm text-charcoal-soft">Verify WSL2 installs and launches correctly</span>
+            </label>
+            <label class="preflight-item">
+              <input type="checkbox" class="preflight-box" value="power" />
+              <span class="preflight-label text-sm text-charcoal-soft">Pack your laptop power adapter</span>
+            </label>
+            <label class="preflight-item">
+              <input type="checkbox" class="preflight-box" value="usb" />
+              <span class="preflight-label text-sm text-charcoal-soft">Confirm USB installer availability with the organisers</span>
+            </label>
+          </div>
+        </div>
+
+        <ul id="schedule-list" class="mt-6 space-y-4"><!-- injected by js/ui.js --></ul>
+      </section>
+
+      <!-- ------------------ CARD 2: SESSION MATERIALS ------------------ -->
+      <section id="materials" data-section="materials" class="card" aria-labelledby="materials-title">
+        <header class="card-header">
+          <span class="card-icon bg-forest/5 text-forest"><i class="fa-solid fa-folder-open" aria-hidden="true"></i></span>
+          <div>
+            <h3 id="materials-title" class="card-title">Session Materials</h3>
+            <p class="card-subtitle">Slides, datasets &amp; labs (Google Drive)</p>
+          </div>
+        </header>
+        <ul id="materials-list" class="mt-6 space-y-3"><!-- injected by js/ui.js --></ul>
+      </section>
+
+      <!-- ------------------ CARD 3: COURSE RESOURCES ------------------ -->
+      <section id="sessions" data-section="sessions" class="card" aria-labelledby="sessions-title">
+        <header class="card-header">
+          <span class="card-icon bg-sage-100 text-forest"><i class="fa-solid fa-book-open-reader" aria-hidden="true"></i></span>
+          <div>
+            <h3 id="sessions-title" class="card-title">Course Resources</h3>
+            <p class="card-subtitle">Tools, docs &amp; reference pipelines</p>
+          </div>
+        </header>
+        <ul id="resources-list" class="mt-6 grid gap-3 sm:grid-cols-2"><!-- injected by js/ui.js --></ul>
+      </section>
+
+      <!-- ------------------ CARD 4: FAQ & Q&A ------------------ -->
+      <section id="faq" data-section="faq" class="card lg:row-span-1" aria-labelledby="faq-title">
+        <header class="card-header">
+          <span class="card-icon bg-leaf/20 text-forest"><i class="fa-regular fa-circle-question" aria-hidden="true"></i></span>
+          <div>
+            <h3 id="faq-title" class="card-title">FAQ &amp; Q&amp;A</h3>
+            <p class="card-subtitle">Common questions &amp; participant questions</p>
+          </div>
+        </header>
+
+        <!-- Accordion -->
+        <div id="faq-accordion" class="mt-6 divide-y divide-sage-100"><!-- injected by js/ui.js --></div>
+
+        <!-- Ask-a-question composer + live feed (distinct dynamic card) -->
+        <div class="mt-8 border-t border-sage-100 pt-6">
+          <div class="overflow-hidden rounded-2xl border border-sage bg-white shadow-soft">
+            <div class="flex items-center justify-between gap-3 border-b border-sage-100 px-4 py-3 sm:px-5">
+              <h4 class="flex items-center gap-2 text-sm font-bold text-forest">
+                <i class="fa-solid fa-comments text-leaf-dark" aria-hidden="true"></i> Participant Q&amp;A
+              </h4>
+              <span id="qa-hint" class="text-xs font-medium text-charcoal-soft" aria-live="polite">Sign in to post</span>
+            </div>
+
+            <div class="p-4 sm:p-5">
+              <!-- Signed-out prompt -->
+              <div id="qa-signedout" class="flex flex-col items-start gap-2 rounded-xl border border-dashed border-sage bg-white p-4">
+                <p class="text-sm text-charcoal-soft"><i class="fa-solid fa-circle-info mr-1 text-leaf-dark" aria-hidden="true"></i>Sign in with your participant Google account to post a question.</p>
+                <p class="text-xs text-charcoal-soft/80">Use the <span class="font-semibold text-forest">Sign in</span> button in the top bar.</p>
+              </div>
+
+              <!-- Composer (visible to everyone, enabled only when signed in) -->
+              <div id="qa-composer" class="mt-3">
+                <div id="qa-user-chip" class="mb-3 hidden items-center gap-2 text-xs text-charcoal-soft">
+                  <img id="qa-avatar" src="" alt="" class="h-6 w-6 rounded-full object-cover" />
+                  Posting as <span id="qa-username" class="font-semibold text-forest"></span>
+                </div>
+                <div class="mb-2 flex items-center gap-2">
+                  <label for="question-category" class="text-xs font-semibold text-charcoal-soft">Topic</label>
+                  <select id="question-category" disabled
+                    class="rounded-lg border border-sage bg-white px-2.5 py-1.5 text-xs font-medium text-forest focus:border-forest focus:outline-none focus:ring-2 focus:ring-forest/15 disabled:cursor-not-allowed disabled:bg-sage-50"><!-- options injected by js/questions.js --></select>
+                </div>
+                <label for="question-input" class="sr-only">Your question</label>
+                <textarea id="question-input" rows="3" maxlength="500" disabled
+                  placeholder="Type your question for the instructor…"
+                  class="w-full resize-none rounded-xl border border-sage bg-white p-3 text-sm text-charcoal placeholder:text-charcoal-soft/60 focus:border-forest focus:outline-none focus:ring-2 focus:ring-forest/15 disabled:cursor-not-allowed disabled:bg-sage-50"></textarea>
+                <div class="mt-2 flex items-center justify-between gap-3">
+                  <span id="char-count" class="text-xs text-charcoal-soft" aria-live="polite">0 / 500</span>
+                  <button id="submit-question" type="button" disabled class="btn-submit focus-visible:ring-2 focus-visible:ring-leaf-dark focus-visible:ring-offset-2">
+                    <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
+                    <span>Submit</span>
+                  </button>
+                </div>
+                <!-- Inline success confirmation -->
+                <p id="qa-feedback" class="mt-3 hidden items-center gap-2 rounded-lg bg-leaf/10 px-3 py-2 text-xs font-semibold text-forest" role="status">
+                  <i class="fa-solid fa-circle-check text-leaf-dark" aria-hidden="true"></i>
+                  <span>Your question has been posted!</span>
+                </p>
+              </div>
+            </div>
+
+            <!-- Recent questions feed -->
+            <div class="border-t border-sage-100 px-4 py-4 sm:px-5">
+              <h4 class="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-charcoal-soft">
+                <i class="fa-solid fa-bolt text-leaf-dark" aria-hidden="true"></i> Recent Questions
+              </h4>
+              <div id="qa-filters" class="mb-3 flex flex-wrap gap-2" role="group" aria-label="Filter questions by topic"><!-- injected by js/questions.js --></div>
+              <ul id="question-feed" class="space-y-3"><!-- injected by js/questions.js --></ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ------------------ DASHBOARD (anchor target) ------------------ -->
+    <section id="dashboard" data-section="dashboard" class="mt-14 overflow-hidden rounded-3xl bg-forest text-white shadow-soft" aria-labelledby="dashboard-title">
+      <div class="grid gap-8 p-8 sm:p-10 lg:grid-cols-[1.2fr_1fr] lg:items-center">
+        <div>
+          <span class="inline-flex items-center gap-2 rounded-full border border-leaf/40 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-leaf-light">
+            <i class="fa-solid fa-user-graduate" aria-hidden="true"></i> My Dashboard
+          </span>
+          <h2 id="dashboard-title" class="mt-5 text-2xl font-bold sm:text-3xl">Your learning, all in one place</h2>
+          <p class="mt-3 max-w-xl text-sage">
+            Sign in with Google to post questions, track attendance and access your personalised
+            material links. Your profile is stored securely via Firebase Authentication.
+          </p>
+        </div>
+        <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
+          <div id="dashboard-signedout" class="text-center">
+            <i class="fa-solid fa-arrow-up text-2xl text-sage" aria-hidden="true"></i>
+            <p class="mb-2 mt-3 text-sm text-sage">You are not signed in yet.</p>
+            <p class="text-xs text-sage/80">Use the <span class="font-semibold text-leaf-light">Sign in</span> button in the top bar to sign in with Google and personalise your dashboard.</p>
+          </div>
+          <div id="dashboard-signedin" class="hidden text-center">
+            <img id="dashboard-avatar" src="" alt="" class="mx-auto h-16 w-16 rounded-full border-2 border-leaf object-cover" />
+            <p id="dashboard-name" class="mt-3 text-lg font-bold"></p>
+            <p id="dashboard-email" class="text-sm text-sage/80"></p>
+            <span class="mt-3 inline-flex items-center gap-2 rounded-full bg-leaf/20 px-3 py-1 text-xs font-semibold text-leaf-light">
+              <i class="fa-solid fa-circle-check" aria-hidden="true"></i> Authenticated
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============================================================= -->
+  <!-- FOOTER (thin forest-green bar)                                -->
+  <!-- ============================================================= -->
+  <footer class="bg-forest text-white">
+    <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-4 py-6 sm:flex-row sm:px-6 lg:px-8">
+      <p class="text-xs text-sage/90 sm:text-sm">
+        <span class="font-bold text-white">BI_TRAIN</span> &copy; <span data-year></span> &middot; Intermediate Plant Genome Bioinformatics Workshop
+      </p>
+      <div class="flex items-center gap-5 text-xs text-sage/80 sm:text-sm">
+        <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="transition hover:text-white" aria-label="GitHub"><i class="fa-brands fa-github" aria-hidden="true"></i> GitHub</a>
+        <a href="mailto:training@example.org" class="transition hover:text-white" aria-label="Email us"><i class="fa-solid fa-envelope" aria-hidden="true"></i> Email</a>
+        <a href="#top" class="font-medium transition hover:text-white">Back to top <i class="fa-solid fa-arrow-up text-[10px]" aria-hidden="true"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast notifications -->
+  <div id="toast-region" class="pointer-events-none fixed bottom-5 right-5 z-[60] flex w-full max-w-sm flex-col gap-2" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- ============================================================= -->
+  <!-- SCRIPT ENTRY (ES modules)                                     -->
+  <!-- ============================================================= -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
