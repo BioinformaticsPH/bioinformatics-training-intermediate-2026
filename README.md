@@ -132,8 +132,8 @@ restrict writes, so both must match. When Firebase is disabled, the widget shows
 
 ### 2. Google Drive material links
 
-In `js/firebase-config.js`, replace every `YOUR_DRIVE_ID` in `DRIVE_LINKS`
-(`slides`, `datasets`, `labNotebooks`). Use the folder/file ID from the Drive share URL,
+In `js/firebase-config.js`, set the folder IDs in `DRIVE_LINKS`
+(`slides`, `datasets`). Use the folder/file ID from the Drive share URL,
 e.g. `https://drive.google.com/drive/folders/1AbC...XYZ`.
 Ensure each item is shared as **“Anyone with the link → Viewer”**.
 

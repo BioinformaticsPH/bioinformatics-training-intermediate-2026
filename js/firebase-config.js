@@ -44,14 +44,13 @@ export const GAS_URL = "https://script.google.com/macros/s/YOUR_GAS_DEPLOYMENT_I
    3) MATERIAL / RESOURCE LINKS
    -----------------------------------------------------------------
    CHANGE THESE GOOGLE DRIVE URLS.
-   Replace YOUR_DRIVE_ID with the folder/file ID from the Drive URL,
+   Each value is the folder/file ID from the Drive share URL,
    e.g. https://drive.google.com/drive/folders/1AbC...XYZ
    These are rendered by js/ui.js.
    ----------------------------------------------------------------- */
 export const DRIVE_LINKS = {
-  slides:       "https://drive.google.com/drive/folders/YOUR_DRIVE_ID",
-  datasets:     "https://drive.google.com/drive/folders/YOUR_DRIVE_ID",
-  labNotebooks: "https://drive.google.com/drive/folders/YOUR_DRIVE_ID"
+  slides:   "https://drive.google.com/drive/folders/1PYw-S-grrh1-WHqFdYubmMdF5rU-8-b1",
+  datasets: "https://drive.google.com/drive/folders/1CsiwowDHBifkZS-NQnoJwhUAR5zKlL7E"
 };
 
 /* -----------------------------------------------------------------

@@ -104,14 +104,6 @@ const MATERIALS = [
     updated: "Updated Oct 2026",
     icon: "fa-database",
     url: DRIVE_LINKS.datasets
-  },
-  {
-    name: "Lab Notebooks",
-    formats: ["Jupyter", "Rmd"],
-    size: "18 MB",
-    updated: "Updated Oct 2026",
-    icon: "fa-book",
-    url: DRIVE_LINKS.labNotebooks
   }
 ];
 
@@ -137,7 +129,7 @@ const FAQS = [
   },
   {
     q: "Where are the session materials posted?",
-    a: "Slides, datasets and lab notebooks are shared in the Session Materials card on Google Drive and updated as the workshop progresses."
+    a: "Slides and datasets are shared in the Session Materials card on Google Drive and updated as the workshop progresses."
   },
   {
     q: "How do I post a question to the instructor?",
