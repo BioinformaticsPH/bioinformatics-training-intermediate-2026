@@ -63,8 +63,9 @@ Everything you must change is commented with `CHANGE ME` / `YOUR_...` in the sou
    };
    ```
 4. **Authentication → Sign-in method →** enable **Google**.
-5. **Authentication → Settings → Authorized domains →** add `lhbarboza-dags.github.io`
-   (and `localhost` if it is not already listed).
+5. **Authentication → Settings → Authorized domains →** add your GitHub Pages host —
+   for this repo `bioinformaticsph.github.io` (plus `localhost` for local dev).
+   Without this, sign-in fails with `auth/unauthorized-domain`.
 6. **Firestore Database →** create a database, then add these rules:
 
    ```

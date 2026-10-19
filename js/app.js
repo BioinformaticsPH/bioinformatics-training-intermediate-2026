@@ -83,6 +83,17 @@ function initProfileDropdown() {
 
 /* --------------------------- Sign in --------------------------- */
 
+const SIGN_IN_ERRORS = {
+  "auth/unauthorized-domain":
+    "This site's domain isn't authorised for sign-in. Add it in Firebase Authentication → Settings → Authorized domains.",
+  "auth/operation-not-allowed":
+    "Google sign-in is disabled. Enable it in Firebase Authentication → Sign-in method.",
+  "auth/invalid-api-key": "The Firebase API key is invalid. Check js/firebase-config.js.",
+  "auth/api-key-not-valid":
+    "The Firebase API key was rejected. Check js/firebase-config.js and any API key restrictions.",
+  "auth/network-request-failed": "Network error during sign-in. Check your connection and retry.",
+};
+
 async function doSignIn() {
   try {
     await signIn();
@@ -98,7 +109,7 @@ async function doSignIn() {
       return;
     }
     console.error("[app] sign-in failed:", err);
-    showToast("Sign-in failed. Please try again.", "error");
+    showToast(SIGN_IN_ERRORS[err?.code] ?? "Sign-in failed. Please try again.", "error");
   }
 }
 
