@@ -20,6 +20,7 @@ import {
   QUESTION_COOLDOWN_MS,
   QUESTION_CATEGORIES,
   QUESTION_TRUNCATE_LENGTH,
+  REPLY_NOTIFY_EMAIL,
   GAS_URL,
   gasEnabled
 } from "./firebase-config.js";
@@ -74,16 +75,6 @@ function timeAgo(ts) {
 
 function categoryBadge(q) {
   return `<span class="inline-flex items-center rounded-full border border-sage px-2 py-0.5 text-[0.68rem] font-medium text-charcoal-soft">${escapeHtml(q.category || "General")}</span>`;
-}
-
-function isAnswered(q) {
-  return q.status === "answered" || (typeof q.answer === "string" && q.answer.trim().length > 0);
-}
-
-function statusBadge(q) {
-  return isAnswered(q)
-    ? `<span class="inline-flex items-center gap-1 rounded-full bg-leaf/20 px-2 py-0.5 text-[0.68rem] font-semibold text-forest"><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Answered</span>`
-    : `<span class="inline-flex items-center gap-1 rounded-full bg-sage-100 px-2 py-0.5 text-[0.68rem] font-semibold text-charcoal-soft"><i class="fa-regular fa-clock" aria-hidden="true"></i> Pending</span>`;
 }
 
 function questionBody(q) {
@@ -381,7 +372,7 @@ function feedItem(q) {
           <span class="truncate font-semibold text-forest">${escapeHtml(name)}</span>
           <span class="shrink-0 text-xs text-charcoal-soft/70">${escapeHtml(timeAgo(q.timestamp))}</span>
         </p>
-        <p class="mt-1 flex flex-wrap items-center gap-1.5">${categoryBadge(q)}${statusBadge(q)}</p>
+        <p class="mt-1 flex flex-wrap items-center gap-1.5">${categoryBadge(q)}</p>
         ${questionBody(q)}
         ${answerBlock(q)}
         ${repliesSection(q)}
@@ -479,6 +470,7 @@ function applyAuthState(user) {
   const select = document.getElementById("question-category");
   const submit = document.getElementById("submit-question");
   const hint = document.getElementById("qa-hint");
+  const notify = document.getElementById("question-notify");
 
   toggles.forEach(({ el, show }) => el?.classList.toggle("hidden", !show));
   if (signedOut) signedOut.classList.toggle("flex", !user);
@@ -489,6 +481,7 @@ function applyAuthState(user) {
     if (input) input.disabled = false;
     if (select) select.disabled = false;
     if (submit) submit.disabled = false;
+    if (notify) notify.disabled = false;
     if (hint) hint.textContent = "Signed in";
     const av = document.getElementById("qa-avatar");
     const un = document.getElementById("qa-username");
@@ -503,6 +496,10 @@ function applyAuthState(user) {
     }
     if (select) select.disabled = true;
     if (submit) submit.disabled = true;
+    if (notify) {
+      notify.disabled = true;
+      notify.checked = false;
+    }
     if (hint) hint.textContent = "Sign in to post";
     updateCharCount();
   }
@@ -581,7 +578,7 @@ async function handleSubmit() {
     avatar: user.photoURL || "",
     question: text,
     category: document.getElementById("question-category")?.value || "General",
-    status: "pending"
+    notifyByEmail: document.getElementById("question-notify")?.checked === true
   };
 
   btn.disabled = true;
@@ -710,6 +707,11 @@ export async function initQuestions() {
   const submit = document.getElementById("submit-question");
 
   populateCategoryOptions();
+
+  // Hide the notification tick when the Apps Script poller is not set up.
+  if (!REPLY_NOTIFY_EMAIL) {
+    document.getElementById("question-notify-wrap")?.classList.add("hidden");
+  }
 
   input?.addEventListener("input", updateCharCount);
   submit?.addEventListener("click", handleSubmit);

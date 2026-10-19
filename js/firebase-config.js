@@ -72,6 +72,11 @@ export const QUESTIONS_COLLECTION = "questions";
 export const REPLIES_SUBCOLLECTION = "replies";
 export const REPLY_MAX_LENGTH = 500;
 
+/* Set to false to hide the "email me when someone replies" tick on the
+   Ask & discuss composer — do that if the Apps Script poller documented
+   in README.md has not been deployed. */
+export const REPLY_NOTIFY_EMAIL = true;
+
 /* Validation / anti-spam settings */
 export const QUESTION_MIN_LENGTH = 10;
 export const QUESTION_MAX_LENGTH = 500;

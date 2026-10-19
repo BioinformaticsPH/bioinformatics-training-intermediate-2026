@@ -223,6 +223,17 @@
             <textarea id="question-input" rows="3" maxlength="500" disabled
               placeholder="Type your question for the instructor…"
               class="w-full resize-none rounded-xl border border-sage bg-white p-3 text-sm text-charcoal placeholder:text-charcoal-soft/60 focus:border-forest focus:outline-none focus:ring-2 focus:ring-forest/15 disabled:cursor-not-allowed disabled:bg-sage-50"></textarea>
+
+            <!-- Reply notification opt-in (needs the Apps Script poller) -->
+            <div id="question-notify-wrap" class="mt-3 flex items-start gap-2 rounded-xl border border-dashed border-sage bg-paper px-3 py-2.5">
+              <input id="question-notify" type="checkbox" disabled
+                class="mt-0.5 h-4 w-4 shrink-0 cursor-pointer accent-forest disabled:cursor-not-allowed disabled:opacity-50" />
+              <label for="question-notify" class="cursor-pointer text-xs text-charcoal-soft">
+                Email me when someone replies to my question
+                <span class="mt-0.5 block text-[0.68rem] text-charcoal-soft/70">Sent to your Google address, with a link back to this page.</span>
+              </label>
+            </div>
+
             <div class="mt-2 flex items-center justify-between gap-3">
               <span id="char-count" class="text-xs text-charcoal-soft" aria-live="polite">0 / 500</span>
               <button id="submit-question" type="button" disabled class="btn-submit focus-visible:ring-2 focus-visible:ring-leaf-dark focus-visible:ring-offset-2">

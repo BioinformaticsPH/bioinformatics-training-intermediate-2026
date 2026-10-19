@@ -82,7 +82,10 @@ Everything you must change is commented with `CHANGE ME` / `YOUR_...` in the sou
          allow create: if request.auth != null
                        && request.resource.data.question is string
                        && request.resource.data.question.size() >= 10
-                       && request.resource.data.question.size() <= 500;
+                       && request.resource.data.question.size() <= 500
+                       && request.resource.data.email == request.auth.token.email
+                       && (!("notifyByEmail" in request.resource.data)
+                           || request.resource.data.notifyByEmail is bool);
          allow update, delete: if false;
 
          // Threaded replies — any signed-in participant may post;
@@ -117,13 +120,18 @@ Everything you must change is commented with `CHANGE ME` / `YOUR_...` in the sou
    `js/firebase-config.js` auto-enables Firebase once `apiKey` no longer contains `YOUR_`.
 
 **Question fields.** Each `questions` document stores `user`, `email`, `avatar`, `question`,
-`category`, `status` and an optional `answer`:
+`category`, `notifyByEmail` and (legacy) `answer`:
 
 | Field | Meaning |
 | --- | --- |
 | `category` | One of `QUESTION_CATEGORIES` (default `General`); drives the feed filter pills. |
-| `status` | `pending` (default) or `answered`. Legacy/console-only — see below. |
+| `email` | Must equal `request.auth.token.email` (enforced by the rules). |
+| `notifyByEmail` | `true` when the author ticked **"Email me when someone replies"**. Consumed by the Apps Script poller (§3). |
 | `answer` | Optional single instructor answer set via the Firebase console; shown beneath the question when present. |
+
+There is no status pill: threads speak for themselves. The old `status` field (`pending` /
+`answered`) is **legacy** — the app no longer writes it and nothing renders it; documents that
+still carry it are harmless.
 
 **Threaded replies.** Discussion lives in a subcollection,
 `questions/{questionId}/replies/{replyId}`:
@@ -169,22 +177,130 @@ In `js/firebase-config.js`, set the folder IDs in `DRIVE_LINKS`
 e.g. `https://drive.google.com/drive/folders/1AbC...XYZ`.
 Ensure each item is shared as **“Anyone with the link → Viewer”**.
 
-### 3. (Optional) Google Apps Script fallback
+### 3. Reply email notifications (Google Apps Script, free)
 
-If you prefer a Google Sheet over Firestore, deploy an Apps Script Web App and paste its `/exec`
-URL into `GAS_URL`. `questions.js` uses it automatically when Firestore is unavailable.
-**Note:** this fallback only accepts new questions — threaded replies require Firestore.
+The Ask &amp; discuss composer on `qa.html` offers a tick — **"Email me when someone replies
+to my question"**. It stores `notifyByEmail: true` on the question; a free Apps Script with a
+**time-based trigger** then polls Firestore every 5 minutes and mails the author when a new
+reply appears. Nothing on the site needs `GAS_URL` for this — the script reads Firestore
+directly over its REST API (your rules allow public reads).
+
+**Setup (once):**
+
+1. <https://script.google.com> → **New project** → paste the `Code.gs` below.
+2. **Project Settings → Script properties** → add
+   `FIREBASE_PROJECT_ID` = `bi-intermediate-training` and
+   `FIREBASE_API_KEY` = the public `apiKey` from `js/firebase-config.js`.
+3. Run **`install()`** from the editor — grant the Gmail prompt and it creates the 5-minute
+   trigger. (Run it once; then leave it alone.)
+4. Run **`testNotify()`** once to see a manual pass over your data.
+5. Publish the **updated rules** from §1 (the create rule now checks `email` and
+   `notifyByEmail`) — otherwise posts are rejected.
+
+To hide the tick, set `REPLY_NOTIFY_EMAIL = false` in `js/firebase-config.js`.
 
 ```js
-// Apps Script — Code.gs
+/* Apps Script — Code.gs  (BI_TRAIN Q&A)
+   1. notifyReplies()  time trigger: polls Firestore for new replies to
+                       questions whose author ticked the email option.
+   2. doPost()         optional Sheet fallback, used only when GAS_URL is
+                       filled in AND Firestore is unavailable.
+*/
+var SITE_URL = 'https://bioinformaticsph.github.io/bioinformatics-training-intermediate-2026/qa.html';
+var SEEN_KEY = 'seenReplies';
+var SEEN_MAX = 400;
+
+function install() {
+  var props = PropertiesService.getScriptProperties();
+  if (!props.getProperty('FIREBASE_PROJECT_ID') || !props.getProperty('FIREBASE_API_KEY')) {
+    throw new Error('Set FIREBASE_PROJECT_ID and FIREBASE_API_KEY script properties first.');
+  }
+  if (!props.getProperty(SEEN_KEY)) props.setProperty(SEEN_KEY, '[]');
+  if (ScriptApp.getProjectTriggers().length === 0) {
+    ScriptApp.newTrigger('notifyReplies').timeBased().everyMinutes(5).create();
+  }
+}
+
+function firestore_(path) {
+  var props = PropertiesService.getScriptProperties();
+  var url = 'https://firestore.googleapis.com/v1/projects/' +
+            props.getProperty('FIREBASE_PROJECT_ID') +
+            '/databases/(default)/documents/' + path +
+            '?pageSize=200&key=' + props.getProperty('FIREBASE_API_KEY');
+  var res = UrlFetchApp.fetch(url, { muteHttpExceptions: true });
+  if (res.getResponseCode() !== 200) {
+    throw new Error('Firestore ' + res.getResponseCode() + ': ' + res.getContentText());
+  }
+  return JSON.parse(res.getContentText()) || { documents: [] };
+}
+
+function text_(f) {
+  if (!f) return '';
+  if (f.stringValue !== undefined) return f.stringValue;
+  if (f.booleanValue !== undefined) return String(f.booleanValue);
+  if (f.timestampValue !== undefined) return f.timestampValue;
+  if (f.integerValue !== undefined) return String(f.integerValue);
+  return '';
+}
+
+function notifyReplies() {
+  var props = PropertiesService.getScriptProperties();
+  var seen = [];
+  try { seen = JSON.parse(props.getProperty(SEEN_KEY) || '[]'); } catch (e) { seen = []; }
+  var known = {};
+  seen.forEach(function (p) { known[p] = true; });
+
+  var changed = false;
+  (firestore_('questions').documents || []).forEach(function (doc) {
+    var f = doc.fields || {};
+    var to = text_(f.email);
+    if (f.notifyByEmail === undefined || f.notifyByEmail.booleanValue !== true || !to) return;
+
+    var qid = doc.name.split('/').pop();
+    var question = text_(f.question);
+    var asker = text_(f.user);
+    var replies;
+    try { replies = firestore_('questions/' + qid + '/replies').documents || []; }
+    catch (e) { Logger.log('replies ' + qid + ': ' + e); return; }
+
+    replies.forEach(function (r) {
+      if (known[r.name]) return;
+      var rf = r.fields || {};
+      var from = text_(rf.email);
+      if (from && from.toLowerCase() === to.toLowerCase()) return; // own reply
+
+      var body = 'Hi ' + (asker || 'there') + ',\n\n' +
+        text_(rf.user) + ' replied to your question on the workshop Q&A page.\n\n' +
+        'Your question:\n' + question + '\n\n' +
+        'Reply:\n' + text_(rf.message) + '\n\n' +
+        'Read and reply: ' + SITE_URL;
+      try { MailApp.sendEmail(to, 'New reply to your question — BI_TRAIN Q&A', body); }
+      catch (e) { Logger.log('email failed ' + r.name + ': ' + e); }
+
+      known[r.name] = true; seen.push(r.name); changed = true;
+    });
+  });
+
+  if (changed) {
+    if (seen.length > SEEN_MAX) seen = seen.slice(seen.length - SEEN_MAX);
+    props.setProperty(SEEN_KEY, JSON.stringify(seen));
+  }
+}
+
+function testNotify() { notifyReplies(); Logger.log('notifyReplies OK'); }
+
 function doPost(e) {
-  const data = JSON.parse(e.postData.contents);
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('questions');
+  var data = JSON.parse(e.postData.contents);
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('questions');
   sheet.appendRow([new Date(), data.user, data.email, data.question]);
   return ContentService.createTextOutput(JSON.stringify({ ok: true }))
     .setMimeType(ContentService.MimeType.JSON);
 }
 ```
+
+`doPost` (job 2) is the **optional Sheet fallback** from the original design: only if you
+deploy a Web app and paste its `/exec` URL into `GAS_URL` does `questions.js` use it — and
+only when Firestore is unavailable. It never touches replies.
 
 ## Deploy to GitHub Pages
 
