@@ -81,16 +81,15 @@ Everything you must change is commented with `CHANGE ME` / `YOUR_...` in the sou
          allow update, delete: if false;
        }
 
-       // Organizer announcements — replace the emails with your
-       // INSTRUCTOR_EMAILS list from js/firebase-config.js.
-       match /announcements/{docId} {
-         allow read: if true;
-         allow create, update, delete: if request.auth != null
-                       && request.auth.token.email in [
-                            "organizer1@example.org",
-                            "organizer2@example.org"
-                          ];
-       }
+        // Organizer announcements — must match INSTRUCTOR_EMAILS
+        // in js/firebase-config.js (they are paired, see above).
+        match /announcements/{docId} {
+          allow read: if true;
+          allow create, update, delete: if request.auth != null
+                        && request.auth.token.email in [
+                             "lhendrixbarboza@gmail.com"
+                           ];
+        }
      }
    }
    ```
