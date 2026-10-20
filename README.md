@@ -1,4 +1,4 @@
-# BI_TRAIN — Intermediate Plant Genome Bioinformatics Workshop 2026
+# Bioinformatics Training — Intermediate Plant Genome Bioinformatics Workshop 2026
 
 A no-build, serverless workshop website (HTML5 + Tailwind CSS via CDN + vanilla ES modules)
 with Firebase Google SSO. It has a landing page (`index.html`) and a dedicated **Participant Q&A
@@ -212,7 +212,7 @@ directly over its REST API (your rules allow public reads).
 To hide the tick, set `REPLY_NOTIFY_EMAIL = false` in `js/firebase-config.js`.
 
 ```js
-/* Apps Script — Code.gs  (BI_TRAIN Q&A)
+/* Apps Script — Code.gs  (Bioinformatics Training Q&A)
    1. notifyReplies()  time trigger: polls Firestore for new replies to
                        questions whose author ticked the email option.
    2. doPost()         optional Sheet fallback, used only when GAS_URL is
@@ -286,7 +286,7 @@ function notifyReplies() {
         'Your question:\n' + question + '\n\n' +
         'Reply:\n' + text_(rf.message) + '\n\n' +
         'Read and reply: ' + SITE_URL;
-      try { MailApp.sendEmail(to, 'New reply to your question — BI_TRAIN Q&A', body); }
+      try { MailApp.sendEmail(to, 'New reply to your question — Bioinformatics Training Q&A', body); }
       catch (e) { Logger.log('email failed ' + r.name + ': ' + e); }
 
       known[r.name] = true; seen.push(r.name); changed = true;
