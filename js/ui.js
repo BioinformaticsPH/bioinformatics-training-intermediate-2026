@@ -82,7 +82,7 @@ const SCHEDULE = [
     ]
   },
   {
-    day: "Day 3 · Date TBC",
+    day: "Day 3 · THU 29 OCT 2026",
     title: "Gene & Function Analysis",
     time: "AM – PM",
     tag: "Lecture + Lab",
@@ -100,7 +100,7 @@ const SCHEDULE = [
     ]
   },
   {
-    day: "Day 4 · Date TBC",
+    day: "Day 4 · FRI 30 OCT 2026",
     title: "Integration",
     time: "AM – PM",
     tag: "Integration",
