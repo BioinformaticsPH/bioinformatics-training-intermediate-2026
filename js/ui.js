@@ -246,14 +246,14 @@ function renderSchedule() {
       </button>
       <div class="sched-panel" id="sched-panel-${i}" role="region" aria-labelledby="sched-trigger-${i}" data-open="false">
         <div class="sched-panel-inner">
-          <ul class="list-disc space-y-1 pl-5 text-sm text-charcoal-soft">
+          <ul class="list-disc space-y-2 pl-5 text-sm text-charcoal-soft">
             ${s.details.map((d) => `<li>${toolBadges(escapeHtml(d))}</li>`).join("")}
           </ul>
           ${
             s.reqs?.length
-              ? `<div class="mt-3 rounded-lg border border-sage-100 bg-paper p-3">
+              ? `<div class="mt-4 rounded-lg border-t border-gray-100/20 pt-3">
                    <p class="text-[11px] font-bold uppercase tracking-wide text-charcoal-soft">Requirements</p>
-                   <ul class="mt-1 list-disc space-y-0.5 pl-5 text-xs text-charcoal-soft">
+                   <ul class="mt-2 list-disc space-y-2 pl-5 text-xs text-charcoal-soft">
                      ${s.reqs.map((r) => `<li>${toolBadges(escapeHtml(r))}</li>`).join("")}
                    </ul>
                  </div>`

@@ -178,6 +178,7 @@ input:focus-visible,
   border-left: 2px solid var(--sage);
   padding-left: 1rem;
   position: relative;
+  margin-bottom: 1.5rem;
 }
 .schedule-day::before {
   content: "";
@@ -218,7 +219,7 @@ input:focus-visible,
   max-height: 30rem;
 }
 .sched-panel-inner {
-  padding: 0.75rem 0.25rem 1.25rem;
+  padding: 1.5rem;
 }
 
 /* ---------- Material rows (subtle icon + download arrow) ---------- */
