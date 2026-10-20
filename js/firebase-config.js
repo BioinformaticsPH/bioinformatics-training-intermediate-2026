@@ -22,12 +22,13 @@
    (e.g. yourname.github.io).
    ----------------------------------------------------------------- */
 export const firebaseConfig = {
-  apiKey: "AIzaSyDIpo1NewXV4RDJ7F_FpS7w2Cko2Xhd0TY",
-  authDomain: "bi-intermediate-training.firebaseapp.com",
-  projectId: "bi-intermediate-training",
-  storageBucket: "bi-intermediate-training.firebasestorage.app",
-  messagingSenderId: "156416689241",
-  appId: "1:156416689241:web:163ce44d4b2a14378f9d48"
+  apiKey: "AIzaSyDbT8D_kK-RbKPntN01OuGNpNtmvlU-Zsg",
+  authDomain: "bi-intermediate-training-57787.firebaseapp.com",
+  projectId: "bi-intermediate-training-57787",
+  storageBucket: "bi-intermediate-training-57787.firebasestorage.app",
+  messagingSenderId: "554200937484",
+  appId: "1:554200937484:web:0d2c4f42a3bcd3570daa29",
+  measurementId: "G-Q8NV83684K"
 };
 
 /* -----------------------------------------------------------------
