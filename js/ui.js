@@ -283,7 +283,6 @@ function renderMaterials() {
           <span class="block truncate text-sm font-semibold text-forest">${escapeHtml(m.name)}</span>
           <span class="mt-1 flex flex-wrap items-center gap-1.5">
             ${m.formats.map((f) => `<span class="rounded bg-sage-100 px-1.5 py-0.5 font-mono text-[0.7rem] font-semibold text-forest">${escapeHtml(f)}</span>`).join("")}
-            <span class="rounded-full bg-leaf/15 px-2 py-0.5 text-[0.7rem] font-semibold text-leaf-dark">${escapeHtml(m.size)}</span>
           </span>
           <span class="mt-1 block text-[0.7rem] text-charcoal-soft/80"><i class="fa-regular fa-clock mr-1" aria-hidden="true"></i>${escapeHtml(m.updated)}</span>
         </span>
