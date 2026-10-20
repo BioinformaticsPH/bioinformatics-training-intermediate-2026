@@ -110,7 +110,8 @@ Everything you must change is commented with `CHANGE ME` / `YOUR_...` in the sou
                         && request.auth.token.email in [
                              "lhendrixbarboza@gmail.com",
                              "nikkiborj@gmail.com",
-                             "vjmulat@gmail.com"
+                             "vjmulat@gmail.com",
+                             "bioinformaticsph@gmail.com"
                            ];
         }
      }

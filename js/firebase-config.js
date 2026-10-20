@@ -108,7 +108,8 @@ export const ANNOUNCEMENTS_LIMIT = 20;
 export const INSTRUCTOR_EMAILS = [
   "lhendrixbarboza@gmail.com",
   "nikkiborj@gmail.com",
-  "vjmulat@gmail.com"
+  "vjmulat@gmail.com",
+  "bioinformaticsph@gmail.com"
 ];
 
 /* Shown in the banner when Firebase/Firestore is unavailable so the
