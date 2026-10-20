@@ -41,3 +41,29 @@ Update branding from BI_TRAIN/G-TRAIN to Bioinformatics Training (or BT where sp
 - Replace the DNA icon in navbar (both index.html and qa.html) with the actual logo image
 - May need to adjust styling (height/width) to fit in the navbar
 - Could also add as alt text "Bioinformatics Training" or similar
+
+## Header Navigation Refinement Plan
+
+### Requirements:
+1. Update Brand Identifier in Navbar:
+   - Replace compact "BT" text with "Bioinformatics Training" as primary title (or keep clean)
+   - Current: BT + subtitle. Want "Bioinformatics Training" as primary title.
+
+2. Refactor Partner Logos Container:
+   - Need to add a dedicated responsive flexbox container for partner logos (CIMMYT, CGIAR, SEARCA, UPLB, PhilRice, and 1k1RG)
+   - Uniform height 28-32px, gap 12-16px, padding to prevent overlap
+   - Can be in header or below main navbar
+
+3. Responsive handling - wrap/scale on tablet/mobile
+
+### Current state:
+- Logo image on left, BT text next to it
+- Nav in middle, auth on right
+
+Need to understand where to place partner logos. Looking at requirements again: "Create a dedicated, responsive flexbox container for the partner logos cluster (CIMMYT, CGIAR, SEARCA, UPLB, PhilRice, and 1k1RG) in the header or directly below the main navbar."
+
+Also the partner logos aren't present as files - maybe they need to be added? Or maybe use text/svgs? Or perhaps the user expects us to structure the layout for them. Let us look up the full requirements again more carefully.
+
+Looking at the full request: "access the final page here. it is not rendering properly" - maybe related to image not being pushed? Also they want header refined with partner logos. The partner logos might need to be added as images or just structured. But we need to see if there are any existing references to these logos.
+
+Let us look up more context about the expected structure. Also check if there's a README or other info about partner logos.
