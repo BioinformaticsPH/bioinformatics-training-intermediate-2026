@@ -138,10 +138,23 @@ const MATERIALS = [
 ];
 
 const RESOURCES = [
+  { name: "FastQC", icon: "fa-solid fa-chart-line", url: "https://www.bioinformatics.babraham.ac.uk/projects/fastqc/" },
+  { name: "fastp", icon: "fa-solid fa-filter", url: "https://github.com/OpenGene/fastp" },
+  { name: "bowtie2", icon: "fa-solid fa-align-left", url: "https://bowtie-bio.sourceforge.net/bowtie2/" },
+  { name: "SAMtools", icon: "fa-solid fa-dna", url: "http://www.htslib.org/doc/samtools.html" },
+  { name: "bcftools", icon: "fa-solid fa-sitemap", url: "http://www.htslib.org/doc/bcftools.html" },
+  { name: "bedtools", icon: "fa-solid fa-table-cells", url: "https://bedtools.readthedocs.io/" },
+  { name: "VCFtools", icon: "fa-solid fa-file-code", url: "https://vcftools.github.io/man_latest.html" },
+  { name: "IGV", icon: "fa-solid fa-dna", url: "https://igv.org/doc/" },
+  { name: "SnpEff", icon: "fa-solid fa-tag", url: "https://pcingola.github.io/SnpEff/" },
+  { name: "Conda", icon: "fa-solid fa-box", url: "https://docs.conda.io/" },
+  { name: "Mamba", icon: "fa-solid fa-cubes", url: "https://mamba.readthedocs.io/" },
+  { name: "Git", icon: "fa-brands fa-git-alt", url: "https://git-scm.com/doc" },
+  { name: "WSL2", icon: "fa-brands fa-windows", url: "https://learn.microsoft.com/en-us/windows/wsl/" },
+  { name: "Ollama", icon: "fa-solid fa-robot", url: "https://ollama.com/" },
   { name: "Galaxy Platform", icon: "fa-solid fa-atom", url: "https://usegalaxy.org" },
   { name: "nf-core Pipelines", icon: "fa-solid fa-diagram-project", url: "https://nf-co.re" },
-  { name: "Bioconductor", icon: "fa-solid fa-flask", url: "https://bioconductor.org" },
-  { name: "IGV Documentation", icon: "fa-solid fa-dna", url: "https://igv.org/doc/" }
+  { name: "Bioconductor", icon: "fa-solid fa-flask", url: "https://bioconductor.org" }
 ];
 
 const FAQS = [
