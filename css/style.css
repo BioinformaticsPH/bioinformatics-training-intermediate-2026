@@ -216,7 +216,7 @@ input:focus-visible,
   transition: max-height 0.3s ease;
 }
 .sched-panel[data-open="true"] {
-  max-height: 30rem;
+  max-height: 60rem;
 }
 .sched-panel-inner {
   padding: 1.5rem;
@@ -237,7 +237,7 @@ input:focus-visible,
   background-color: var(--sage-50);
 }
 
-/* ---------- Pre-Flight Checklist (Day 0 setup) ---------- */
+/* ---------- Pre-Flight Checklist (pre-training setup) ---------- */
 .preflight-item {
   display: flex;
   align-items: flex-start;

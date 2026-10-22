@@ -16,27 +16,6 @@ import { DRIVE_LINKS } from "./firebase-config.js";
    Workshop. All sessions are conducted entirely IN PERSON (face-to-face). */
 const SCHEDULE = [
   {
-    day: "Day 0 · Mon 26 Oct 2026",
-    title: "Pre-workshop Technical Setup",
-    time: "AM",
-    tag: "Setup",
-    accent: "forest",
-    lead: "All (Nikki for afternoon only)",
-    details: [
-      "Technical foundation & software installations: FastQC, fastp, bowtie2, SAMtools, VCFtools, IGV",
-      "WSL2 dry-run check",
-      "USB installers & group assignments"
-    ],
-    reqs: [
-      "Software list with versions: FastQC, fastp, bowtie2, SAMtools, VCFtools, IGV",
-      "Installation documentation for every tool",
-      "WSL2 installation dry-run completed by Oct 15",
-      "USB with installer",
-      "Dataset on USB",
-      "Working group assignments"
-    ]
-  },
-  {
     day: "Day 1 · Mon 26 Oct 2026",
     title: "Command Line Bioinformatics",
     time: "AM – PM",
@@ -44,21 +23,60 @@ const SCHEDULE = [
     accent: "leaf",
     lead: "Dags",
     details: [
-      "Morning — Command line: environment & shell basics (terminal, file permissions, conda/mamba)",
-      "Morning — File manipulation for FASTQ, FASTA, SAM/BAM and VCF (awk, grep, samtools, bedtools)",
-      "Morning — Version control / Git: init, add, commit, diff, .gitignore, folder structure",
-      "Afternoon — AI: genomic log & data interpretation (LLMs for error parsing and VCF summaries)",
-      "Afternoon — Data governance & privacy (API vs local models such as Ollama)",
-      "Afternoon — AI pitfalls & Git recovery live demo"
+      {
+        label: "Morning — Pre-training (≈ 2 h): welcome, requirements & setup",
+        items: [
+          "Welcome session and verification of the pre-training requirements",
+          "Software installation (FastQC, fastp, bowtie2, SAMtools, VCFtools, IGV) and environment setup"
+        ]
+      },
+      {
+        label: "Morning — Module 1: Terminal, files & paths",
+        items: [
+          "Environment & shell basics (prompts, `pwd`, navigation with `cd`, absolute vs. relative paths)",
+          "File management operations (`mkdir`, `touch`, `cp`, `mv`, `rm`), listing files (`ls -lh`), and using wildcards (`*`)"
+        ]
+      },
+      {
+        label: "Morning — Module 2: Sequence files & compression",
+        items: [
+          "Text (ASCII) vs. binary formats; anatomy of FASTA and VCF records",
+          "Compression and archiving utilities: `gzip`, `gunzip`, and `tar` (tarball creation, extraction, and listing)"
+        ]
+      },
+      {
+        label: "Morning — Module 3: Inspect & filter text",
+        items: [
+          "Non-destructive viewing (`head`, `tail`, `zcat`, `less -S`)",
+          "Parsing utilities (`grep`, `awk`, `sed`) combined with pipes (`|`) and redirection (`>`, `>>`)"
+        ]
+      },
+      {
+        label: "Afternoon — Module 4: Organize, protect & monitor",
+        items: [
+          "Project hygiene rules and standard folder structure (`00_meta/`, `01_data/raw/`, `02_scripts/`, etc.)",
+          "File permissions (`chmod`, `chown`), protecting raw data (`chmod a-w`), and system monitoring with `top`"
+        ]
+      },
+      {
+        label: "Afternoon — Module 5: AI as a helper",
+        items: [
+          "Three golden rules of prompt engineering (Context, Task clarity, Constraints)",
+          "Pipeline translation from plain English, safety guardrails, and the “Read before you run” principle"
+        ]
+      },
+      {
+        label: "Afternoon — Module 6: AI-assisted debugging & Hands-on Lab",
+        items: [
+          "The Copy-Paste-Fix loop, handling DOS-to-Unix line endings (`dos2unix`), quoting differences, and memory limits (`Killed`)",
+          "End-to-end practical lab: workspace setup, stream pipelines, compression, and AI-driven error troubleshooting"
+        ]
+      }
     ],
     reqs: [
-      "Hardware & environment validation: WSL2 dry-run check on participant machines before Day 1 (catch PATH or system issues early)",
-      "Demo data prep: tiny trimmed test file (~100-line FASTQ or ~20-record VCF) for the Git recovery demo",
-      "GitHub account for the version control exercises",
-      "Pre-written commands cheat sheet of working one-liners",
-      "AI platform account (choose at least one: Google Gemini, Anthropic Claude or Cursor)",
-      "Optional offline alternative: Ollama with llama3 or qwen2.5-coder pre-pulled",
-      "Offline USB drives with software packages, conda/mamba environments, cheat sheets and datasets"
+      "**Core commands:** `pwd`, `ls -lh`, `cd`, `head`, `tail`, `grep`, `awk`, `tar`, `chmod`, `top`, `history`",
+      "**Software / environment:** WSL2 (Ubuntu Bash), Git, AI assistant (Gemini / Claude / Cursor) or local Ollama",
+      "**Files:** practice dataset (`metadata.txt`, `sample.fasta`)"
     ]
   },
   {
@@ -163,12 +181,12 @@ const FAQS = [
     a: "Yes — all tracks are conducted entirely in person (face-to-face). There are no online or virtual sessions."
   },
   {
-    q: "What do I need to set up before Day 0?",
-    a: "Bring a laptop and, if you can, the tools pre-installed — FastQC, fastp, bowtie2, SAMtools, VCFtools and IGV (versions are listed with the materials). A working WSL2 installation is required: complete the WSL2 dry-run check by Oct 15. Day 0 resolves any remaining environment or PATH issues on site, and USB installers are provided."
+    q: "What do I need to set up before the workshop?",
+    a: "Bring a laptop and, if you can, the tools pre-installed — FastQC, fastp, bowtie2, SAMtools, VCFtools and IGV (versions are listed with the materials). A working WSL2 installation is required: complete the WSL2 dry-run check by Oct 15. The Day 1 pre-training block (≈ 2 h, morning) resolves any remaining environment or PATH issues on site, and USB installers are provided."
   },
   {
     q: "Do I need to install software locally?",
-    a: "Practicals run in your local WSL2 environment and on on-site workstations. Bring a laptop — setup is verified together on Day 0 and USB installers are available."
+    a: "Practicals run in your local WSL2 environment and on on-site workstations. Bring a laptop — setup is verified together during the Day 1 pre-training block and USB installers are available."
   },
   {
     q: "Where are the session materials posted?",
@@ -228,13 +246,51 @@ const ACCENT_CLASS = {
 /* Bioinformatics tool names highlighted as monospace badges inside the
    schedule descriptions. Matched case-insensitively after escaping so the
    surrounding text stays safe. */
-const TOOL_RE = /\b(WSL2|FastQC|fastp|bowtie2|SAMtools|VCFtools|IGV|bcftools|SnpEff|bedtools)\b/gi;
+const TOOL_RE =
+  /\b(WSL2|FastQC|fastp|bowtie2|SAMtools|VCFtools|IGV|bcftools|SnpEff|bedtools|FASTQ|FASTA|VCF|Git|Ollama|Gemini|Claude|Cursor)\b/gi;
+
+/* Shared chip styling for tool names and for `inline code` spans. */
+const CODE_CHIP =
+  "rounded bg-sage-100 px-1 py-0.5 font-mono text-[0.72rem] font-semibold text-forest";
 
 function toolBadges(escaped) {
-  return escaped.replace(
-    TOOL_RE,
-    '<code class="rounded bg-sage-100 px-1 py-0.5 font-mono text-[0.72rem] font-semibold text-forest">$1</code>'
-  );
+  return escaped.replace(TOOL_RE, `<code class="${CODE_CHIP}">$1</code>`);
+}
+
+/* Inline formatting for schedule copy: `code` becomes a monospace chip,
+   **text** becomes a bold lead-in, everything else keeps the tool badges.
+   The text is escaped first, so no markup can be injected. */
+function formatInline(text = "") {
+  return escapeHtml(text)
+    .split(/(`[^`]+`|\*\*[^*]+\*\*)/g)
+    .filter(Boolean)
+    .map((part) => {
+      if (part.startsWith("`") && part.endsWith("`")) {
+        return `<code class="${CODE_CHIP}">${part.slice(1, -1)}</code>`;
+      }
+      if (part.startsWith("**") && part.endsWith("**")) {
+        return `<strong class="font-semibold text-forest">${part.slice(2, -2)}</strong>`;
+      }
+      return toolBadges(part);
+    })
+    .join("");
+}
+
+/* A schedule detail is either a flat bullet (string) or a module heading
+   with nested bullets ({ label, items }). */
+function renderDetails(details = []) {
+  return details
+    .map((d) =>
+      typeof d === "string"
+        ? `<li>${formatInline(d)}</li>`
+        : `<li class="list-none">
+             <p class="font-semibold text-forest">${formatInline(d.label)}</p>
+             <ul class="mt-1 list-disc space-y-1 pl-4 text-[0.8rem]">
+               ${d.items.map((i) => `<li>${formatInline(i)}</li>`).join("")}
+             </ul>
+           </li>`
+    )
+    .join("");
 }
 
 function renderSchedule() {
@@ -260,14 +316,14 @@ function renderSchedule() {
       <div class="sched-panel" id="sched-panel-${i}" role="region" aria-labelledby="sched-trigger-${i}" data-open="false">
         <div class="sched-panel-inner">
           <ul class="list-disc space-y-2 pl-5 text-sm text-charcoal-soft">
-            ${s.details.map((d) => `<li>${toolBadges(escapeHtml(d))}</li>`).join("")}
+            ${renderDetails(s.details)}
           </ul>
           ${
             s.reqs?.length
               ? `<div class="mt-4 rounded-lg border-t border-gray-100/20 pt-3">
                    <p class="text-[11px] font-bold uppercase tracking-wide text-charcoal-soft">Requirements</p>
                    <ul class="mt-2 list-disc space-y-2 pl-5 text-xs text-charcoal-soft">
-                     ${s.reqs.map((r) => `<li>${toolBadges(escapeHtml(r))}</li>`).join("")}
+                     ${s.reqs.map((r) => `<li>${formatInline(r)}</li>`).join("")}
                    </ul>
                  </div>`
               : ""
@@ -278,7 +334,17 @@ function renderSchedule() {
   ).join("");
 
   list.querySelectorAll(".sched-trigger").forEach((btn) => {
-    btn.addEventListener("click", () => togglePanel(btn, ".sched-panel"));
+    btn.addEventListener("click", () => togglePanel(btn, true));
+  });
+
+  /* Once a panel has finished expanding it is released to its natural
+     height, so late-loading fonts or longer content can never clip it. */
+  list.querySelectorAll(".sched-panel").forEach((panel) => {
+    panel.addEventListener("transitionend", (e) => {
+      if (e.propertyName === "max-height" && panel.getAttribute("data-open") === "true") {
+        panel.style.maxHeight = "none";
+      }
+    });
   });
 }
 
@@ -351,7 +417,8 @@ function renderFaq() {
 }
 
 /* Pre-Flight Checklist: persists tick state in localStorage so participants
-   can work through Day 0 setup tasks across reloads. Purely client-side. */
+   can work through the pre-training setup tasks across reloads. Purely
+   client-side. */
 const PREFLIGHT_KEY = "bi:preflight";
 
 function initChecklist() {
@@ -395,12 +462,37 @@ function initChecklist() {
 
 /* --------------------------- INTERACTIONS ---------------------- */
 
-/* Generic accordion toggle shared by the schedule and FAQ panels. */
-function togglePanel(btn) {
+/* Generic accordion toggle shared by the schedule and FAQ panels.
+   `measure` animates the panel to its real content height — the schedule
+   blocks (notably Day 1) are far taller than any static cap. */
+function togglePanel(btn, measure = false) {
   const expanded = btn.getAttribute("aria-expanded") === "true";
   const panel = document.getElementById(btn.getAttribute("aria-controls"));
+  if (!panel) return;
   btn.setAttribute("aria-expanded", String(!expanded));
-  if (panel) panel.setAttribute("data-open", String(!expanded));
+
+  if (!measure) {
+    panel.setAttribute("data-open", String(!expanded));
+    return;
+  }
+
+  if (expanded) {
+    panel.style.maxHeight = `${panel.scrollHeight}px`;
+    requestAnimationFrame(() => {
+      panel.setAttribute("data-open", "false");
+      panel.style.maxHeight = "0px";
+    });
+  } else {
+    panel.setAttribute("data-open", "true");
+    panel.style.maxHeight = `${panel.scrollHeight}px`;
+  }
+}
+
+/* Keep open schedule panels fitted after a viewport change. */
+function syncPanelHeights() {
+  document.querySelectorAll('.sched-panel[data-open="true"]').forEach((p) => {
+    p.style.maxHeight = "none";
+  });
 }
 
 function toggleFaq(btn) {
@@ -483,6 +575,12 @@ export function initUI() {
   initNav();
   initMobileMenu();
   initChecklist();
+
+  let resizeRaf = 0;
+  window.addEventListener("resize", () => {
+    cancelAnimationFrame(resizeRaf);
+    resizeRaf = requestAnimationFrame(syncPanelHeights);
+  });
 
   const year = document.querySelector("[data-year]");
   if (year) year.textContent = new Date().getFullYear();
