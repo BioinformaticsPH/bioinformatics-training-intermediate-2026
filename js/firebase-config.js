@@ -50,8 +50,8 @@ export const GAS_URL = "https://script.google.com/macros/s/YOUR_GAS_DEPLOYMENT_I
    These are rendered by js/ui.js.
    ----------------------------------------------------------------- */
 export const DRIVE_LINKS = {
-  slides:   "https://drive.google.com/drive/folders/1PYw-S-grrh1-WHqFdYubmMdF5rU-8-b1",
-  datasets: "https://drive.google.com/drive/folders/1CsiwowDHBifkZS-NQnoJwhUAR5zKlL7E"
+  slides:   "https://drive.google.com/drive/folders/1nMgrCca6IxbElVE0hFdGLLTOnXWWlB_1?usp=sharing",
+  datasets: "https://drive.google.com/drive/folders/1PsopTaeftxE5pCxy24MviFK6D6igxyAJ?usp=sharing"
 };
 
 /* -----------------------------------------------------------------

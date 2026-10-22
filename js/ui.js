@@ -348,26 +348,28 @@ function renderSchedule() {
   });
 }
 
+/* Each material is a standalone Google Drive button: the link action that
+   used to sit inside the row is now the row itself. */
 function renderMaterials() {
   const list = document.getElementById("materials-list");
   if (!list) return;
   list.innerHTML = MATERIALS.map(
     (m) => `
     <li>
-      <a href="${m.url}" target="_blank" rel="noopener noreferrer" class="material-row group">
-        <span class="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-leaf/15 text-forest">
+      <a href="${m.url}" target="_blank" rel="noopener noreferrer" class="drive-button">
+        <span class="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-white text-forest">
           <i class="fa-brands fa-google-drive text-lg" aria-hidden="true"></i>
         </span>
         <span class="min-w-0 flex-1">
-          <span class="block truncate text-sm font-semibold text-forest">${escapeHtml(m.name)}</span>
+          <span class="block truncate text-sm font-semibold">${escapeHtml(m.name)}</span>
           <span class="mt-1 flex flex-wrap items-center gap-1.5">
-            ${m.formats.map((f) => `<span class="rounded bg-sage-100 px-1.5 py-0.5 font-mono text-[0.7rem] font-semibold text-forest">${escapeHtml(f)}</span>`).join("")}
+            ${m.formats.map((f) => `<span class="rounded bg-white px-1.5 py-0.5 font-mono text-[0.7rem] font-semibold text-forest">${escapeHtml(f)}</span>`).join("")}
+            <span class="text-[0.7rem] opacity-70"><i class="fa-regular fa-clock mr-1" aria-hidden="true"></i>${escapeHtml(m.updated)}</span>
           </span>
-          <span class="mt-1 block text-[0.7rem] text-charcoal-soft/80"><i class="fa-regular fa-clock mr-1" aria-hidden="true"></i>${escapeHtml(m.updated)}</span>
         </span>
-        <span class="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-sage-100 px-2.5 py-1.5 text-[0.7rem] font-semibold text-forest transition group-hover:bg-forest group-hover:text-white">
-          <i class="fa-brands fa-google-drive" aria-hidden="true"></i>
-          <span class="hidden sm:inline">Open in Google Drive</span>
+        <span class="shrink-0 text-[0.72rem] font-semibold uppercase tracking-wide opacity-80">
+          <span class="sr-only sm:not-sr-only">Open in Google Drive</span>
+          <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
         </span>
       </a>
     </li>`
