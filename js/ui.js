@@ -17,7 +17,7 @@ import { DRIVE_LINKS } from "./firebase-config.js";
 const SCHEDULE = [
   {
     day: "Day 1 · Mon 26 Oct 2026",
-    title: "Command Line Bioinformatics",
+    title: "Command-Line & AI-Assisted Bioinformatics",
     time: "AM – PM",
     tag: "Hands-on",
     accent: "leaf",
