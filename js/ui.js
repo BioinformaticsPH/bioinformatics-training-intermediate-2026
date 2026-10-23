@@ -16,122 +16,94 @@ import { DRIVE_LINKS } from "./firebase-config.js";
    Workshop. All sessions are conducted entirely IN PERSON (face-to-face). */
 const SCHEDULE = [
   {
-    day: "Day 1 · Mon 26 Oct 2026",
-    title: "Command-Line & AI-Assisted Bioinformatics",
-    time: "AM – PM",
-    tag: "Hands-on",
-    accent: "leaf",
-    lead: "Dags",
-    details: [
-      {
-        label: "Morning — Pre-training (≈ 2 h): welcome, requirements & setup",
-        items: [
-          "Welcome session and verification of the pre-training requirements",
-          "Software installation (FastQC, fastp, bowtie2, SAMtools, VCFtools, IGV) and environment setup"
-        ]
-      },
-      {
-        label: "Morning — Module 1: Terminal, files & paths",
-        items: [
-          "Environment & shell basics (prompts, `pwd`, navigation with `cd`, absolute vs. relative paths)",
-          "File management operations (`mkdir`, `touch`, `cp`, `mv`, `rm`), listing files (`ls -lh`), and using wildcards (`*`)"
-        ]
-      },
-      {
-        label: "Morning — Module 2: Sequence files & compression",
-        items: [
-          "Text (ASCII) vs. binary formats; anatomy of FASTA and VCF records",
-          "Compression and archiving utilities: `gzip`, `gunzip`, and `tar` (tarball creation, extraction, and listing)"
-        ]
-      },
-      {
-        label: "Morning — Module 3: Inspect & filter text",
-        items: [
-          "Non-destructive viewing (`head`, `tail`, `zcat`, `less -S`)",
-          "Parsing utilities (`grep`, `awk`, `sed`) combined with pipes (`|`) and redirection (`>`, `>>`)"
-        ]
-      },
-      {
-        label: "Afternoon — Module 4: Organize, protect & monitor",
-        items: [
-          "Project hygiene rules and standard folder structure (`00_meta/`, `01_data/raw/`, `02_scripts/`, etc.)",
-          "File permissions (`chmod`, `chown`), protecting raw data (`chmod a-w`), and system monitoring with `top`"
-        ]
-      },
-      {
-        label: "Afternoon — Module 5: AI as a helper",
-        items: [
-          "Three golden rules of prompt engineering (Context, Task clarity, Constraints)",
-          "Pipeline translation from plain English, safety guardrails, and the “Read before you run” principle"
-        ]
-      },
-      {
-        label: "Afternoon — Module 6: AI-assisted debugging & Hands-on Lab",
-        items: [
-          "The Copy-Paste-Fix loop, handling DOS-to-Unix line endings (`dos2unix`), quoting differences, and memory limits (`Killed`)",
-          "End-to-end practical lab: workspace setup, stream pipelines, compression, and AI-driven error troubleshooting"
-        ]
-      }
-    ],
-    reqs: [
-      "**Core commands:** `pwd`, `ls -lh`, `cd`, `head`, `tail`, `grep`, `awk`, `tar`, `chmod`, `top`, `history`",
-      "**Software / environment:** WSL2 (Ubuntu Bash), Git, AI assistant (Gemini / Claude / Cursor) or local Ollama",
-      "**Files:** practice dataset (`metadata.txt`, `sample.fasta`)"
+    day: "Day 0 · Mon 26 Oct 2026",
+    title: "Arrival & Pre-workshop Technical Setup",
+    time: "13:30 – 16:00",
+    tag: "Setup",
+    accent: "sage",
+    lead: "Training Team",
+    sessions: [
+      { time: "13:30 – 16:00", activity: "Arrival & Pre-workshop Technical Setup", lead: "Training Team" }
     ]
   },
   {
-    day: "Day 2 · Tue 27 Oct 2026",
-    title: "Variant Discovery & Genomics Pipelines",
-    time: "AM – PM",
-    tag: "Lecture + Lab",
+    day: "Day 1 · Tue 27 Oct 2026",
+    title: "Linux & Command-Line Foundations",
+    time: "08:00 – 17:00",
+    tag: "Module 1",
+    accent: "leaf",
+    lead: "Lord Hendrix Barboza",
+    sessions: [
+      { time: "08:00 – 08:30", activity: "Registration", lead: "" },
+      { time: "08:30 – 09:30", activity: "Opening Program", lead: "SEARCA Team" },
+      { time: "09:30 – 10:00", activity: "Intro Workshop Recap", lead: "Frances Nikki Borja" },
+      { time: "10:00 – 10:15", activity: "Coffee Break", lead: "" },
+      { time: "10:15 – 12:00", activity: "Lecture: Introduction to Linux", lead: "Lord Hendrix Barboza" },
+      { time: "12:00 – 13:00", activity: "Lunch Break", lead: "" },
+      { time: "13:00 – 15:00", activity: "Hands-on", lead: "Lord Hendrix Barboza & Team" },
+      { time: "15:00 – 15:15", activity: "Coffee Break", lead: "" },
+      { time: "15:15 – 16:45", activity: "Hands-on", lead: "Lord Hendrix Barboza & Team" },
+      { time: "16:45 – 17:00", activity: "Wrap Up of Day 1", lead: "Frances Nikki Borja" }
+    ]
+  },
+  {
+    day: "Day 2 · Wed 28 Oct 2026",
+    title: "Variant Calling & SNP-Seek",
+    time: "08:30 – 17:00",
+    tag: "Module 2",
     accent: "forest",
-    lead: "Nikki",
-    details: [
-      "Morning — Concept lecture: Illumina short-read sequencing overview, paired-end reads and QC rationale",
-      "Morning — End-to-end workflow: FastQC (QC) → fastp (cleaning) → bowtie2 & SAMtools (alignment) → bcftools (variant calling)",
-      "Afternoon — Hands-on: Integrative Genomics Viewer (IGV)",
-      "Afternoon — Hands-on: SNP / marker discovery"
-    ],
-    reqs: [
-      "Dataset",
-      "Pipeline / workflow",
-      "Software",
-      "Cheat sheet"
+    lead: "Frances Nikki Borja",
+    sessions: [
+      { time: "08:30 – 09:00", activity: "Review & Q&A for Module 1", lead: "Frances Nikki Borja" },
+      { time: "09:00 – 10:15", activity: "Lecture: Variant Calling", lead: "Frances Nikki Borja" },
+      { time: "10:15 – 10:30", activity: "Coffee Break", lead: "" },
+      { time: "10:30 – 12:00", activity: "Demo: Variant Calling Pipeline", lead: "Frances Nikki Borja" },
+      { time: "12:00 – 13:00", activity: "Lunch Break", lead: "" },
+      { time: "13:00 – 15:15", activity: "Hands-on", lead: "Frances Nikki Borja & Team" },
+      { time: "15:15 – 15:30", activity: "Coffee Break", lead: "" },
+      { time: "15:30 – 16:45", activity: "SNP-Seek", lead: "Lord Hendrix Barboza" },
+      { time: "16:45 – 17:00", activity: "Day 2 Wrap-up", lead: "Frances Nikki Borja" }
     ]
   },
   {
-    day: "Day 3 · Wed 28 Oct 2026",
-    title: "Gene & Function Analysis",
-    time: "AM – PM",
-    tag: "Lecture + Lab",
+    day: "Day 3 · Thu 29 Oct 2026",
+    title: "Gen AI & Comparative Genomics",
+    time: "08:30 – 17:00",
+    tag: "Module 3",
     accent: "leaf",
-    lead: "Victor",
-    details: [
-      "Bridging genomic discoveries with functional biological insights",
-      "Candidate gene mapping & specialized bioinformatics tools",
-      "Assays design & database exploration",
-      "SnpEff variant annotation"
-    ],
-    reqs: [
-      "Dataset",
-      "Cheat sheet"
+    lead: "Victor Jun Ulat",
+    sessions: [
+      { time: "08:30 – 09:00", activity: "Review and Q & A for Module 2", lead: "Frances Nikki Borja" },
+      { time: "09:00 – 10:00", activity: "Lecture: Bioinformatics and Gen AI", lead: "Victor Jun Ulat" },
+      { time: "10:00 – 10:15", activity: "Coffee Break", lead: "" },
+      { time: "10:15 – 10:45", activity: "Tutorial: Mastering Genbank", lead: "Frances Nikki Borja" },
+      { time: "10:45 – 12:00", activity: "Lecture: Comparative Genomics", lead: "Victor Jun Ulat" },
+      { time: "12:00 – 13:00", activity: "Lunch Break", lead: "" },
+      { time: "13:00 – 15:00", activity: "Hands-on", lead: "Victor Jun Ulat & Team" },
+      { time: "15:00 – 15:15", activity: "Coffee Break", lead: "" },
+      { time: "15:15 – 16:15", activity: "Hands-on", lead: "Victor Jun Ulat & Team" },
+      { time: "16:15 – 16:45", activity: "Project Assignments", lead: "Training Team" },
+      { time: "16:45 – 17:00", activity: "Day 3 Wrap-up", lead: "Victor Jun Ulat" }
     ]
   },
   {
-    day: "Day 4 · Thu 29 Oct 2026",
-    title: "Integration",
-    time: "AM – PM",
+    day: "Day 4 · Fri 30 Oct 2026",
+    title: "Integration & Final Presentations",
+    time: "08:30 – 17:00",
     tag: "Integration",
     accent: "forest",
-    lead: "All (Nikki for afternoon only)",
-    details: [
-      "Synthesis of knowledge across all previous days",
-      "Apply skills to participants' own plant genomic datasets",
-      "Independent pipeline execution",
-      "Train-the-Trainers session"
-    ],
-    reqs: [
-      "5 possible problems to work through with participants"
+    lead: "Training Team",
+    sessions: [
+      { time: "08:30 – 09:00", activity: "Integration project", lead: "Frances Nikki Borja" },
+      { time: "09:00 – 10:30", activity: "Group work", lead: "Groups" },
+      { time: "10:30 – 10:45", activity: "Coffee Break", lead: "" },
+      { time: "10:45 – 12:00", activity: "Group work", lead: "Groups" },
+      { time: "12:00 – 13:00", activity: "Lunch Break", lead: "" },
+      { time: "13:00 – 14:00", activity: "Finalization of Group work", lead: "Groups" },
+      { time: "14:00 – 15:15", activity: "Final Presentations", lead: "All" },
+      { time: "15:15 – 15:30", activity: "Coffee Break", lead: "" },
+      { time: "15:30 – 16:00", activity: "Course Wrap-up", lead: "Training Team" },
+      { time: "16:00 – 17:00", activity: "Closing Program", lead: "SEARCA" }
     ]
   }
 ];
@@ -182,11 +154,11 @@ const FAQS = [
   },
   {
     q: "What do I need to set up before the workshop?",
-    a: "Bring a laptop and, if you can, the tools pre-installed — FastQC, fastp, bowtie2, SAMtools, VCFtools and IGV (versions are listed with the materials). A working WSL2 installation is required: complete the WSL2 dry-run check by Oct 15. The Day 1 pre-training block (≈ 2 h, morning) resolves any remaining environment or PATH issues on site, and USB installers are provided."
+    a: "Bring a laptop and, if you can, the tools pre-installed — FastQC, fastp, bowtie2, SAMtools, VCFtools and IGV (versions are listed with the materials). A working WSL2 installation is required: complete the WSL2 dry-run check by Oct 15. The Day 0 pre-workshop setup block (Mon 26 Oct, 13:30–16:00) resolves any remaining environment or PATH issues on site, and USB installers are provided."
   },
   {
     q: "Do I need to install software locally?",
-    a: "Practicals run in your local WSL2 environment and on on-site workstations. Bring a laptop — setup is verified together during the Day 1 pre-training block and USB installers are available."
+    a: "Practicals run in your local WSL2 environment and on on-site workstations. Bring a laptop — setup is verified together during the Day 0 pre-workshop setup block and USB installers are available."
   },
   {
     q: "Where are the session materials posted?",
@@ -243,53 +215,23 @@ const ACCENT_CLASS = {
   sage: "bg-sage-100 text-charcoal-soft"
 };
 
-/* Bioinformatics tool names highlighted as monospace badges inside the
-   schedule descriptions. Matched case-insensitively after escaping so the
-   surrounding text stays safe. */
-const TOOL_RE =
-  /\b(WSL2|FastQC|fastp|bowtie2|SAMtools|VCFtools|IGV|bcftools|SnpEff|bedtools|FASTQ|FASTA|VCF|Git|Ollama|Gemini|Claude|Cursor)\b/gi;
-
-/* Shared chip styling for tool names and for `inline code` spans. */
-const CODE_CHIP =
-  "rounded bg-sage-100 px-1 py-0.5 font-mono text-[0.72rem] font-semibold text-forest";
-
-function toolBadges(escaped) {
-  return escaped.replace(TOOL_RE, `<code class="${CODE_CHIP}">$1</code>`);
-}
-
-/* Inline formatting for schedule copy: `code` becomes a monospace chip,
-   **text** becomes a bold lead-in, everything else keeps the tool badges.
-   The text is escaped first, so no markup can be injected. */
-function formatInline(text = "") {
-  return escapeHtml(text)
-    .split(/(`[^`]+`|\*\*[^*]+\*\*)/g)
-    .filter(Boolean)
-    .map((part) => {
-      if (part.startsWith("`") && part.endsWith("`")) {
-        return `<code class="${CODE_CHIP}">${part.slice(1, -1)}</code>`;
-      }
-      if (part.startsWith("**") && part.endsWith("**")) {
-        return `<strong class="font-semibold text-forest">${part.slice(2, -2)}</strong>`;
-      }
-      return toolBadges(part);
+/* Each day is a chronological list of sessions; break rows are muted. */
+function renderSessions(sessions = []) {
+  return sessions
+    .map(({ time, activity, lead }) => {
+      const isBreak = /break/i.test(activity);
+      return `<li class="schedule-session${isBreak ? " schedule-session-break" : ""}">
+        <span class="schedule-session-time"><i class="fa-regular fa-clock mr-1.5" aria-hidden="true"></i>${escapeHtml(time)}</span>
+        <span class="schedule-session-body">
+          <span class="schedule-session-activity">${escapeHtml(activity)}</span>
+          ${
+            lead
+              ? `<span class="schedule-session-lead"><i class="fa-solid fa-user-tie mr-1.5" aria-hidden="true"></i><span class="sr-only">Resource person: </span>${escapeHtml(lead)}</span>`
+              : ""
+          }
+        </span>
+      </li>`;
     })
-    .join("");
-}
-
-/* A schedule detail is either a flat bullet (string) or a module heading
-   with nested bullets ({ label, items }). */
-function renderDetails(details = []) {
-  return details
-    .map((d) =>
-      typeof d === "string"
-        ? `<li>${formatInline(d)}</li>`
-        : `<li class="list-none">
-             <p class="font-semibold text-forest">${formatInline(d.label)}</p>
-             <ul class="mt-1 list-disc space-y-1 pl-4 text-[0.8rem]">
-               ${d.items.map((i) => `<li>${formatInline(i)}</li>`).join("")}
-             </ul>
-           </li>`
-    )
     .join("");
 }
 
@@ -315,19 +257,9 @@ function renderSchedule() {
       </button>
       <div class="sched-panel" id="sched-panel-${i}" role="region" aria-labelledby="sched-trigger-${i}" data-open="false">
         <div class="sched-panel-inner">
-          <ul class="list-disc space-y-2 pl-5 text-sm text-charcoal-soft">
-            ${renderDetails(s.details)}
-          </ul>
-          ${
-            s.reqs?.length
-              ? `<div class="mt-4 rounded-lg border-t border-gray-100/20 pt-3">
-                   <p class="text-[11px] font-bold uppercase tracking-wide text-charcoal-soft">Requirements</p>
-                   <ul class="mt-2 list-disc space-y-2 pl-5 text-xs text-charcoal-soft">
-                     ${s.reqs.map((r) => `<li>${formatInline(r)}</li>`).join("")}
-                   </ul>
-                 </div>`
-              : ""
-          }
+          <ol class="schedule-sessions">
+            ${renderSessions(s.sessions)}
+          </ol>
         </div>
       </div>
     </li>`

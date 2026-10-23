@@ -85,7 +85,7 @@ export const QUESTION_COOLDOWN_MS = 30 * 1000; // 30s between submissions
 
 /* Category pills for the Recent Questions filter bar. Participants pick one
    when submitting; questions without a category fall back to "General". */
-export const QUESTION_CATEGORIES = ["Day 1", "Day 2", "Day 3", "Day 4", "Technical", "General"];
+export const QUESTION_CATEGORIES = ["Day 0", "Day 1", "Day 2", "Day 3", "Day 4", "Technical", "General"];
 
 /* Questions longer than this are collapsed behind a Show more / Show less
    toggle in the feed. */

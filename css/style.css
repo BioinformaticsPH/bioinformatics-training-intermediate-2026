@@ -221,6 +221,72 @@ input:focus-visible,
 .sched-panel-inner {
   padding: 1.5rem;
 }
+.schedule-sessions {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.schedule-session {
+  display: grid;
+  grid-template-columns: 7.4rem minmax(0, 1fr);
+  gap: 0.8rem;
+  padding: 0.6rem 0.7rem;
+  border-radius: 0.65rem;
+  border-left: 2px solid var(--leaf);
+  background: var(--sage-50);
+}
+.schedule-session-break {
+  border-left-color: var(--sage);
+  background: transparent;
+}
+.schedule-session-time {
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--forest);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.schedule-session-body {
+  min-width: 0;
+}
+.schedule-session-activity {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--charcoal);
+}
+.schedule-session-break .schedule-session-activity {
+  font-weight: 500;
+  color: var(--charcoal-soft);
+}
+.schedule-session-lead {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.72rem;
+  line-height: 1.4;
+  color: var(--charcoal-soft);
+}
+.schedule-session-lead i {
+  color: var(--leaf-dark);
+}
+
+@media (max-width: 640px) {
+  .sched-panel-inner {
+    padding: 1rem;
+  }
+  .schedule-session {
+    grid-template-columns: 1fr;
+    gap: 0.15rem;
+    padding: 0.55rem 0.65rem;
+  }
+  .schedule-session-time {
+    white-space: normal;
+  }
+}
 
 /* ---------- Material buttons (Google Drive) ---------- */
 .drive-button {
