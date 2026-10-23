@@ -174,6 +174,66 @@
     </div>
   </section>
 
+  <!-- ============================================================= -->
+  <!-- ORGANIZER ANNOUNCEMENTS (live broadcast banner)               -->
+  <!-- ============================================================= -->
+  <section id="announcements" class="bg-paper" aria-label="Organizer announcements">
+    <div class="mx-auto max-w-7xl px-4 pt-8 sm:px-6 lg:px-8">
+
+      <div id="announce-banner" class="announce-banner hidden">
+        <div class="flex items-start gap-3">
+          <span class="mt-0.5 inline-flex shrink-0 items-center gap-1.5 rounded-full bg-amber-400 px-2.5 py-1 text-[0.68rem] font-extrabold uppercase tracking-wide text-amber-950">
+            <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-red-600" aria-hidden="true"></span>
+            Live Announcement
+          </span>
+          <div id="announce-banner-body" class="min-w-0 flex-1">
+            <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+              <span id="announce-time" class="text-xs font-medium text-amber-900/70"></span>
+            </div>
+            <p id="announce-message" class="mt-1 break-words text-sm font-medium text-charcoal"></p>
+          </div>
+          <div class="flex shrink-0 items-center gap-1">
+            <button id="announce-collapse" type="button" class="announce-icon-btn" aria-expanded="true" aria-controls="announce-banner-body" aria-label="Collapse announcement">
+              <i class="fa-solid fa-chevron-up" aria-hidden="true"></i>
+            </button>
+            <button id="announce-dismiss" type="button" class="announce-icon-btn" aria-label="Dismiss announcement">
+              <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div id="announce-compose" class="hidden mt-4 rounded-2xl border border-amber-200 bg-amber-50/60 p-4 sm:p-5">
+        <h3 class="mb-2 flex items-center gap-2 text-sm font-bold text-forest">
+          <i class="fa-solid fa-bullhorn text-amber-600" aria-hidden="true"></i> Broadcast an announcement
+        </h3>
+        <label for="announce-input" class="sr-only">Announcement message</label>
+        <textarea id="announce-input" rows="2" maxlength="280" placeholder="Type an update for participants (venue, schedule, links…)" class="w-full resize-none rounded-xl border border-sage bg-white p-3 text-sm text-charcoal placeholder:text-charcoal-soft/60 focus:border-forest focus:outline-none focus:ring-2 focus:ring-forest/15"></textarea>
+        <div class="mt-2 flex flex-wrap items-center justify-between gap-3">
+          <label class="inline-flex items-center gap-2 text-xs font-medium text-charcoal-soft">
+            <input id="announce-pin" type="checkbox" class="h-4 w-4 accent-amber-500" checked />
+            Pin as live banner
+          </label>
+          <div class="flex items-center gap-3">
+            <span id="announce-count" class="text-xs text-charcoal-soft" aria-live="polite">0 / 280</span>
+            <button id="announce-submit" type="button" class="btn-submit focus-visible:ring-2 focus-visible:ring-leaf-dark focus-visible:ring-offset-2">
+              <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
+              <span>Post</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div id="announce-history" class="mt-4">
+        <h3 class="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-charcoal-soft">
+          <i class="fa-solid fa-clock-rotate-left text-amber-600" aria-hidden="true"></i> Announcement History
+        </h3>
+        <ul id="announce-list" class="space-y-2"></ul>
+      </div>
+
+    </div>
+  </section>
+
   <main id="main" class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
     <div class="mb-10 max-w-2xl">
       <h2 class="text-2xl font-bold tracking-tight text-forest sm:text-3xl">Training Hub</h2>
