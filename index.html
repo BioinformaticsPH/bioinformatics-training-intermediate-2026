@@ -21,11 +21,11 @@
       theme: {
         extend: {
           colors: {
-            forest: { DEFAULT: '#0B3C23', 900: '#082E1B', 700: '#0F4A2C', 600: '#155C37', 50: '#E8F1EA' },
-            leaf: { DEFAULT: '#87C232', dark: '#71A528', light: '#A6D95F', 50: '#F3F8E8' },
-            sage: { DEFAULT: '#D1DBCE', 100: '#E7EEE4', 50: '#F4F7F5' },
-            charcoal: { DEFAULT: '#1A2E22', soft: '#41544A' },
-            paper: '#F4F7F5'
+            forest: { DEFAULT: '#166534', 900: '#14532D', 700: '#15803D', 600: '#166534', 50: '#F0FDF4' },
+            leaf: { DEFAULT: '#22C55E', dark: '#16A34A', light: '#4ADE80', 50: '#F0FDF4' },
+            sage: { DEFAULT: '#E2E8F0', 100: '#F1F5F9', 50: '#F8FAFC' },
+            charcoal: { DEFAULT: '#0F172A', soft: '#64748B' },
+            paper: '#F8FAFC'
           },
           fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'] },
           boxShadow: { soft: '0 10px 40px -18px rgba(11, 60, 35, 0.45)', card: '0 1px 2px rgba(16, 24, 40, 0.04), 0 1px 3px rgba(16, 24, 40, 0.06)' }
@@ -57,47 +57,46 @@
   </script>
 </head>
 
-<body class="bg-paper text-charcoal font-sans antialiased">
+<body class="bg-[#F8FAFC] text-[#0F172A] font-sans antialiased">
   <a href="#main" class="skip-link">Skip to main content</a>
 
-  <header id="site-header" class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-sage">
+  <header id="site-header" class="sticky top-0 z-50 bg-white border-b border-slate-200">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="flex h-16 items-center justify-between gap-4">
         <a href="index.html" class="flex items-center gap-3 shrink-0 group" aria-label="Bioinformatics Training home">
           <span class="leading-tight">
-            <span class="block text-base font-extrabold tracking-wide text-forest">Bioinformatics Training</span>
-            <span class="hidden text-[11px] font-medium text-charcoal-soft sm:block">Intermediate Plant Genome Bioinformatics Workshop</span>
+            <span class="block text-base font-semibold tracking-tight text-[#0F172A]">Bioinformatics Training</span>
           </span>
         </a>
 
-        <nav aria-label="Primary" class="hidden lg:block">
-          <ul class="flex items-center gap-1 text-sm font-medium">
-            <li><a class="nav-link" href="index.html" aria-current="page">Home</a></li>
-            <li><a class="nav-link" href="schedule.html">Schedule</a></li>
-            <li><a class="nav-link" href="resources.html">Resources</a></li>
-            <li><a class="nav-link" href="materials.html">Materials</a></li>
-            <li><a class="nav-link" href="faq.html">FAQ</a></li>
-            <li><a class="nav-link" href="qa.html">Q&amp;A</a></li>
-            <li><a class="nav-link" href="dashboard.html">My Dashboard</a></li>
+        <nav aria-label="Primary" class="hidden lg:flex lg:flex-1 lg:justify-center">
+          <ul class="flex items-center gap-6 text-sm font-medium">
+            <li><a class="text-[#64748B] hover:text-[#0F172A] transition" href="index.html" aria-current="page">Home</a></li>
+            <li><a class="text-[#64748B] hover:text-[#0F172A] transition" href="schedule.html">Schedule</a></li>
+            <li><a class="text-[#64748B] hover:text-[#0F172A] transition" href="resources.html">Resources</a></li>
+            <li><a class="text-[#64748B] hover:text-[#0F172A] transition" href="materials.html">Materials</a></li>
+            <li><a class="text-[#64748B] hover:text-[#0F172A] transition" href="faq.html">FAQ</a></li>
+            <li><a class="text-[#64748B] hover:text-[#0F172A] transition" href="qa.html">Q&amp;A</a></li>
+            <li><a class="text-[#64748B] hover:text-[#0F172A] transition" href="dashboard.html">My Dashboard</a></li>
           </ul>
         </nav>
 
         <div class="flex items-center gap-2 sm:gap-3">
-          <button id="header-signin" type="button" class="hidden items-center gap-2 rounded-full bg-forest px-4 py-2 text-sm font-semibold text-white transition hover:bg-forest-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-leaf-dark">
+          <button id="header-signin" type="button" class="hidden items-center gap-2 rounded-full bg-[#166534] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#15803D] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#22C55E]">
             <i class="fa-brands fa-google" aria-hidden="true"></i>
             Sign in
           </button>
 
           <div id="header-profile" class="relative hidden">
-            <button id="profile-toggle" type="button" class="flex items-center gap-2 rounded-full border border-sage bg-white py-1 pl-1 pr-3 text-charcoal transition hover:bg-sage-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-leaf-dark" aria-haspopup="menu" aria-expanded="false" aria-controls="profile-menu">
-              <img id="profile-avatar" src="" alt="" class="h-8 w-8 rounded-full border border-sage object-cover" />
-              <span id="profile-name" class="hidden max-w-[10rem] truncate text-sm font-semibold text-forest sm:inline"></span>
-              <i class="fa-solid fa-chevron-down text-xs text-charcoal-soft" aria-hidden="true"></i>
+            <button id="profile-toggle" type="button" class="flex items-center gap-2 rounded-full border border-slate-200 bg-white py-1 pl-1 pr-3 text-[#0F172A] transition hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#22C55E]" aria-haspopup="menu" aria-expanded="false" aria-controls="profile-menu">
+              <img id="profile-avatar" src="" alt="" class="h-8 w-8 rounded-full border border-slate-200 object-cover" />
+              <span id="profile-name" class="hidden max-w-[10rem] truncate text-sm font-medium sm:inline">Lord Hendrix Barboza</span>
+              <i class="fa-solid fa-chevron-down text-xs text-[#64748B]" aria-hidden="true"></i>
             </button>
-            <div id="profile-menu" role="menu" class="absolute right-0 mt-2 hidden w-64 overflow-hidden rounded-xl border border-sage bg-white text-charcoal shadow-soft">
-              <div class="border-b border-sage-100 p-4">
-                <p id="menu-name" class="truncate text-sm font-semibold text-forest"></p>
-                <p id="menu-email" class="truncate text-xs text-charcoal-soft"></p>
+            <div id="profile-menu" role="menu" class="absolute right-0 mt-2 hidden w-64 overflow-hidden rounded-xl border border-slate-200 bg-white text-[#0F172A] shadow-sm">
+              <div class="border-b border-slate-100 p-4">
+                <p id="menu-name" class="truncate text-sm font-medium"></p>
+                <p id="menu-email" class="truncate text-xs text-[#64748B]"></p>
               </div>
               <button id="logout-btn" type="button" role="menuitem" class="flex w-full items-center gap-3 px-4 py-3 text-left text-sm font-medium text-red-600 transition hover:bg-red-50">
                 <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Sign out
@@ -125,36 +124,38 @@
     </div>
   </header>
 
-  <section id="top" class="relative isolate overflow-hidden bg-forest text-white">
-    <div class="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
-      <div class="max-w-3xl">
-        <span class="inline-flex items-center gap-2 rounded-full border border-leaf/40 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-leaf-light">
-          <i class="fa-solid fa-seedling" aria-hidden="true"></i> Plant Genome Bioinformatics &middot; Intermediate &middot; 2026
-        </span>
-        <h1 class="mt-6 text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl lg:text-5xl">
-          Intermediate Plant Genome Bioinformatics Workshop
-        </h1>
-        <p class="mt-2 text-sm font-medium leading-snug tracking-tight text-leaf-light sm:text-base">
-          26–30 October 2026 | SEARCA Headquarters, UPLB Campus, College, Los Baños, Laguna
-        </p>
-        <p class="mt-4 max-w-2xl text-sm leading-relaxed text-sage sm:text-base">
-          Hands-on, in-person plant genome bioinformatics training &mdash; command-line workflows,
-          variant discovery, gene function analysis, and leveraging AI tools to accelerate data
-          processing, troubleshooting, and trait discovery. Join us face-to-face and work through
-          real plant genomic datasets alongside the instructors.
-        </p>
+  <section id="top" class="bg-[#F8FAFC]">
+    <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8 lg:py-16">
+      <div class="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:items-start">
+        <div class="lg:col-span-7">
+          <span class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium uppercase tracking-wider text-[#64748B] shadow-sm">
+            <i class="fa-solid fa-leaf text-[#166534]" aria-hidden="true"></i> Plant Genome Bioinformatics • Intermediate • 2026
+          </span>
+          <h1 class="mt-6 text-3xl font-bold leading-tight tracking-tight text-[#0F172A] sm:text-4xl lg:text-5xl">
+            Intermediate Plant Genome Bioinformatics Workshop
+          </h1>
+          <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-[#64748B]">
+            <span class="inline-flex items-center gap-2"><i class="fa-regular fa-calendar text-[#166534]"></i> 26–30 October 2026</span>
+            <span class="inline-flex items-center gap-2"><i class="fa-solid fa-location-dot text-[#166534]"></i> SEARCA Headquarters, UPLB Campus, College, Los Baños, Laguna</span>
+          </div>
+          <p class="mt-5 max-w-2xl text-base leading-relaxed text-[#475569]">
+            Hands-on, in-person plant genome bioinformatics training &mdash; command-line workflows,
+            variant discovery, gene function analysis, and leveraging AI tools to accelerate data
+            processing, troubleshooting, and trait discovery. Join us face-to-face and work through
+            real plant genomic datasets alongside the instructors.
+          </p>
 
-        <div class="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
-          <a href="schedule.html" class="btn-primary group">
-            <i class="fa-regular fa-calendar-days" aria-hidden="true"></i>
-            View Full Schedule
-            <i class="fa-solid fa-arrow-right text-xs transition group-hover:translate-x-0.5" aria-hidden="true"></i>
-          </a>
-          <a href="materials.html" class="btn-outline">
-            <i class="fa-solid fa-folder-open" aria-hidden="true"></i>
-            Explore Materials
-          </a>
-        </div>
+          <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <a href="schedule.html" class="inline-flex items-center gap-2 rounded-md bg-[#166534] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#15803D] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#22C55E]">
+              <i class="fa-regular fa-calendar-days" aria-hidden="true"></i>
+              View Full Schedule
+              <i class="fa-solid fa-arrow-right text-xs"></i>
+            </a>
+            <a href="materials.html" class="inline-flex items-center gap-2 rounded-md border border-[#166534] px-5 py-2.5 text-sm font-semibold text-[#166534] transition hover:bg-[#F0FDF4] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#22C55E]">
+              <i class="fa-solid fa-folder-open" aria-hidden="true"></i>
+              Explore Materials
+            </a>
+          </div>
 
 <!-- ============================================================= -->
   <!-- ORGANIZER ANNOUNCEMENTS (live broadcast banner)               -->
@@ -232,6 +233,35 @@
             <dd class="mt-1 text-lg font-bold tracking-tight text-white sm:text-xl lg:text-2xl">In person</dd>
           </div>
         </dl>
+        </div>
+        <div class="lg:col-span-5">
+          <div class="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+            <div class="border-b border-slate-200 p-6">
+              <div class="flex items-center gap-3">
+                <div class="flex h-10 w-10 items-center justify-center rounded-full bg-[#F0FDF4] text-[#166534]">
+                  <i class="fa-solid fa-user-graduate"></i>
+                </div>
+                <div>
+                  <h2 class="text-lg font-semibold text-[#0F172A]">Your learning, all in one place</h2>
+                  <p class="text-sm text-[#64748B]">Sign in to track progress and access materials</p>
+                </div>
+              </div>
+            </div>
+            <div class="p-6">
+              <div id="dashboard-signedout">
+                <p class="text-sm text-[#475569]">Use the Sign in button in the top bar to sign in with Google and personalise your dashboard.</p>
+              </div>
+              <div id="dashboard-signedin" class="hidden flex items-center gap-3">
+                <img id="dashboard-avatar" src="" alt="" class="h-12 w-12 rounded-full border border-slate-200 object-cover" />
+                <div>
+                  <p id="dashboard-name" class="font-medium text-[#0F172A]"></p>
+                  <p id="dashboard-email" class="text-sm text-[#64748B]"></p>
+                  <span class="mt-1 inline-flex items-center gap-1 text-xs text-[#166534]"><i class="fa-solid fa-circle-check"></i> Authenticated</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
