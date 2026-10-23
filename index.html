@@ -21,11 +21,11 @@
       theme: {
         extend: {
           colors: {
-            forest: { DEFAULT: '#166534', 900: '#14532D', 700: '#15803D', 600: '#166534', 50: '#F0FDF4' },
-            leaf: { DEFAULT: '#22C55E', dark: '#16A34A', light: '#4ADE80', 50: '#F0FDF4' },
-            sage: { DEFAULT: '#E2E8F0', 100: '#F1F5F9', 50: '#F8FAFC' },
-            charcoal: { DEFAULT: '#0F172A', soft: '#64748B' },
-            paper: '#F8FAFC'
+            forest: { DEFAULT: '#0B3C23', 900: '#082E1B', 700: '#0F4A2C', 600: '#155C37', 50: '#E8F1EA' },
+            leaf: { DEFAULT: '#87C232', dark: '#71A528', light: '#A6D95F', 50: '#F3F8E8' },
+            sage: { DEFAULT: '#D1DBCE', 100: '#E7EEE4', 50: '#F4F7F5' },
+            charcoal: { DEFAULT: '#1A2E22', soft: '#41544A' },
+            paper: '#F4F7F5'
           },
           fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'] },
           boxShadow: { soft: '0 10px 40px -18px rgba(11, 60, 35, 0.45)', card: '0 1px 2px rgba(16, 24, 40, 0.04), 0 1px 3px rgba(16, 24, 40, 0.06)' }
@@ -57,46 +57,47 @@
   </script>
 </head>
 
-<body class="bg-[#F8FAFC] text-[#0F172A] font-sans antialiased">
+<body class="bg-paper text-charcoal font-sans antialiased">
   <a href="#main" class="skip-link">Skip to main content</a>
 
-  <header id="site-header" class="sticky top-0 z-50 bg-white border-b border-slate-200">
+  <header id="site-header" class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-sage">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="flex h-16 items-center justify-between gap-4">
         <a href="index.html" class="flex items-center gap-3 shrink-0 group" aria-label="Bioinformatics Training home">
           <span class="leading-tight">
-            <span class="block text-base font-semibold tracking-tight text-[#0F172A]">Bioinformatics Training</span>
+            <span class="block text-base font-extrabold tracking-wide text-forest">Bioinformatics Training</span>
+            <span class="hidden text-[11px] font-medium text-charcoal-soft sm:block">Intermediate Plant Genome Bioinformatics Workshop</span>
           </span>
         </a>
 
-        <nav aria-label="Primary" class="hidden lg:flex lg:flex-1 lg:justify-center">
-          <ul class="flex items-center gap-6 text-sm font-medium">
-            <li><a class="text-[#64748B] hover:text-[#0F172A] transition" href="index.html" aria-current="page">Home</a></li>
-            <li><a class="text-[#64748B] hover:text-[#0F172A] transition" href="schedule.html">Schedule</a></li>
-            <li><a class="text-[#64748B] hover:text-[#0F172A] transition" href="resources.html">Resources</a></li>
-            <li><a class="text-[#64748B] hover:text-[#0F172A] transition" href="materials.html">Materials</a></li>
-            <li><a class="text-[#64748B] hover:text-[#0F172A] transition" href="faq.html">FAQ</a></li>
-            <li><a class="text-[#64748B] hover:text-[#0F172A] transition" href="qa.html">Q&amp;A</a></li>
-            <li><a class="text-[#64748B] hover:text-[#0F172A] transition" href="dashboard.html">My Dashboard</a></li>
+        <nav aria-label="Primary" class="hidden lg:block">
+          <ul class="flex items-center gap-1 text-sm font-medium">
+            <li><a class="nav-link" href="index.html" aria-current="page">Home</a></li>
+            <li><a class="nav-link" href="schedule.html">Schedule</a></li>
+            <li><a class="nav-link" href="resources.html">Resources</a></li>
+            <li><a class="nav-link" href="materials.html">Materials</a></li>
+            <li><a class="nav-link" href="faq.html">FAQ</a></li>
+            <li><a class="nav-link" href="qa.html">Q&amp;A</a></li>
+            <li><a class="nav-link" href="dashboard.html">My Dashboard</a></li>
           </ul>
         </nav>
 
         <div class="flex items-center gap-2 sm:gap-3">
-          <button id="header-signin" type="button" class="hidden items-center gap-2 rounded-full bg-[#166534] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#15803D] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#22C55E]">
+          <button id="header-signin" type="button" class="hidden items-center gap-2 rounded-full bg-forest px-4 py-2 text-sm font-semibold text-white transition hover:bg-forest-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-leaf-dark">
             <i class="fa-brands fa-google" aria-hidden="true"></i>
             Sign in
           </button>
 
           <div id="header-profile" class="relative hidden">
-            <button id="profile-toggle" type="button" class="flex items-center gap-2 rounded-full border border-slate-200 bg-white py-1 pl-1 pr-3 text-[#0F172A] transition hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#22C55E]" aria-haspopup="menu" aria-expanded="false" aria-controls="profile-menu">
-              <img id="profile-avatar" src="" alt="" class="h-8 w-8 rounded-full border border-slate-200 object-cover" />
-              <span id="profile-name" class="hidden max-w-[10rem] truncate text-sm font-medium sm:inline">Lord Hendrix Barboza</span>
-              <i class="fa-solid fa-chevron-down text-xs text-[#64748B]" aria-hidden="true"></i>
+            <button id="profile-toggle" type="button" class="flex items-center gap-2 rounded-full border border-sage bg-white py-1 pl-1 pr-3 text-charcoal transition hover:bg-sage-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-leaf-dark" aria-haspopup="menu" aria-expanded="false" aria-controls="profile-menu">
+              <img id="profile-avatar" src="" alt="" class="h-8 w-8 rounded-full border border-sage object-cover" />
+              <span id="profile-name" class="hidden max-w-[10rem] truncate text-sm font-semibold text-forest sm:inline"></span>
+              <i class="fa-solid fa-chevron-down text-xs text-charcoal-soft" aria-hidden="true"></i>
             </button>
-            <div id="profile-menu" role="menu" class="absolute right-0 mt-2 hidden w-64 overflow-hidden rounded-xl border border-slate-200 bg-white text-[#0F172A] shadow-sm">
-              <div class="border-b border-slate-100 p-4">
-                <p id="menu-name" class="truncate text-sm font-medium"></p>
-                <p id="menu-email" class="truncate text-xs text-[#64748B]"></p>
+            <div id="profile-menu" role="menu" class="absolute right-0 mt-2 hidden w-64 overflow-hidden rounded-xl border border-sage bg-white text-charcoal shadow-soft">
+              <div class="border-b border-sage-100 p-4">
+                <p id="menu-name" class="truncate text-sm font-semibold text-forest"></p>
+                <p id="menu-email" class="truncate text-xs text-charcoal-soft"></p>
               </div>
               <button id="logout-btn" type="button" role="menuitem" class="flex w-full items-center gap-3 px-4 py-3 text-left text-sm font-medium text-red-600 transition hover:bg-red-50">
                 <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i> Sign out
@@ -124,83 +125,119 @@
     </div>
   </header>
 
-  
+  <section id="top" class="relative isolate overflow-hidden bg-forest text-white">
+    <div class="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
+      <div class="max-w-3xl">
+        <span class="inline-flex items-center gap-2 rounded-full border border-leaf/40 bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-leaf-light">
+          <i class="fa-solid fa-seedling" aria-hidden="true"></i> Plant Genome Bioinformatics &middot; Intermediate &middot; 2026
+        </span>
+        <h1 class="mt-6 text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
+          Intermediate Plant Genome Bioinformatics Workshop
+        </h1>
+        <p class="mt-2 text-base font-medium text-leaf-light sm:text-lg">
+          26–30 October 2026 | SEARCA Headquarters, UPLB Campus, College, Los Baños, Laguna
+        </p>
+        <p class="mt-4 max-w-2xl text-base leading-relaxed text-sage sm:text-lg">
+          Hands-on, in-person plant genome bioinformatics training &mdash; command-line workflows,
+          variant discovery, gene function analysis, and leveraging AI tools to accelerate data
+          processing, troubleshooting, and trait discovery. Join us face-to-face and work through
+          real plant genomic datasets alongside the instructors.
+        </p>
 
-        <dl class="mt-10 grid max-w-xl grid-cols-3 gap-6 border-t border-white/15 pt-7">
+        <div class="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
+          <a href="schedule.html" class="btn-primary group">
+            <i class="fa-regular fa-calendar-days" aria-hidden="true"></i>
+            View Full Schedule
+            <i class="fa-solid fa-arrow-right text-xs transition group-hover:translate-x-0.5" aria-hidden="true"></i>
+          </a>
+          <a href="materials.html" class="btn-outline">
+            <i class="fa-solid fa-folder-open" aria-hidden="true"></i>
+            Explore Materials
+          </a>
+        </div>
+
+        <dl class="mt-12 grid max-w-xl grid-cols-3 gap-6 border-t border-white/15 pt-8">
           <div>
-            <dt class="text-[10px] font-medium uppercase tracking-wider text-white/60">Training Days</dt>
-            <dd class="mt-1 text-lg font-bold tracking-tight text-white sm:text-xl lg:text-2xl">5</dd>
+            <dt class="text-xs font-medium uppercase tracking-wider text-white/60">Training Days</dt>
+            <dd class="mt-1 text-2xl font-bold text-white">5</dd>
           </div>
           <div>
-            <dt class="text-[10px] font-medium uppercase tracking-wider text-white/60">Tools Covered</dt>
-            <dd class="mt-1 text-lg font-bold tracking-tight text-white sm:text-xl lg:text-2xl">9</dd>
+            <dt class="text-xs font-medium uppercase tracking-wider text-white/60">Tools Covered</dt>
+            <dd class="mt-1 text-2xl font-bold text-white">9</dd>
           </div>
           <div>
-            <dt class="text-[10px] font-medium uppercase tracking-wider text-white/60">Format</dt>
-            <dd class="mt-1 text-lg font-bold tracking-tight text-white sm:text-xl lg:text-2xl">In person</dd>
+            <dt class="text-xs font-medium uppercase tracking-wider text-white/60">Format</dt>
+            <dd class="mt-1 text-2xl font-bold text-white">In person</dd>
           </div>
         </dl>
-        </div>
-        <div class="lg:col-span-5">
-          <div class="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
-            <div class="border-b border-slate-200 p-6">
-              <div class="flex items-center gap-3">
-                <div class="flex h-10 w-10 items-center justify-center rounded-full bg-amber-50 text-amber-700">
-                  <i class="fa-solid fa-bullhorn"></i>
-                </div>
-                <div>
-                  <h2 class="text-lg font-semibold text-[#0F172A]">Announcements</h2>
-                  <p class="text-sm text-[#64748B]">Latest updates from the organizers</p>
-                </div>
-              </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================= -->
+  <!-- ORGANIZER ANNOUNCEMENTS (live broadcast banner)               -->
+  <!-- ============================================================= -->
+  <section id="announcements" class="bg-paper" aria-label="Organizer announcements">
+    <div class="mx-auto max-w-7xl px-4 pt-8 sm:px-6 lg:px-8">
+
+      <div id="announce-banner" class="announce-banner hidden">
+        <div class="flex items-start gap-3">
+          <span class="mt-0.5 inline-flex shrink-0 items-center gap-1.5 rounded-full bg-amber-400 px-2.5 py-1 text-[0.68rem] font-extrabold uppercase tracking-wide text-amber-950">
+            <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-red-600" aria-hidden="true"></span>
+            Live Announcement
+          </span>
+          <div id="announce-banner-body" class="min-w-0 flex-1">
+            <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+              <span id="announce-time" class="text-xs font-medium text-amber-900/70"></span>
             </div>
-            <div class="p-6">
-              <div id="announce-banner" class="announce-banner hidden">
-                <div class="flex items-start gap-3">
-                  <span class="mt-0.5 inline-flex shrink-0 items-center gap-1.5 rounded-full bg-amber-400 px-2.5 py-1 text-[0.68rem] font-extrabold uppercase tracking-wide text-amber-950">
-                    <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-red-600" aria-hidden="true"></span>
-                    Live Announcement
-                  </span>
-                  <div id="announce-banner-body" class="min-w-0 flex-1">
-                    <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
-                      <span id="announce-time" class="text-xs font-medium text-amber-900/70"></span>
-                    </div>
-                    <p id="announce-message" class="mt-1 break-words text-sm font-medium text-charcoal"></p>
-                  </div>
-                  <div class="flex shrink-0 items-center gap-1">
-                    <button id="announce-collapse" type="button" class="announce-icon-btn" aria-expanded="true" aria-controls="announce-banner-body" aria-label="Collapse announcement">
-                      <i class="fa-solid fa-chevron-up" aria-hidden="true"></i>
-                    </button>
-                    <button id="announce-dismiss" type="button" class="announce-icon-btn" aria-label="Dismiss announcement">
-                      <i class="fa-solid fa-xmark" aria-hidden="true"></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div id="announce-compose" class="hidden mt-3 rounded-lg border border-amber-200/70 bg-amber-50/40 p-3">
-                <textarea id="announce-input" rows="2" maxlength="280" placeholder="Type an update..." class="w-full resize-none rounded-lg border border-slate-200 bg-white p-2 text-sm text-[#0F172A]"></textarea>
-                <div class="mt-2 flex items-center justify-between">
-                  <label class="inline-flex items-center gap-2 text-xs text-[#64748B]">
-                    <input id="announce-pin" type="checkbox" class="accent-amber-500" checked /> Pin
-                  </label>
-                  <button id="announce-submit" type="button" class="rounded-md bg-[#166534] px-3 py-1.5 text-xs font-semibold text-white">Post</button>
-                </div>
-                <span id="announce-count" class="text-xs text-[#64748B]">0 / 280</span>
-              </div>
-              <div id="announce-history" class="mt-3">
-                <ul id="announce-list" class="space-y-2"></ul>
-              </div>
-            </div>
+            <p id="announce-message" class="mt-1 break-words text-sm font-medium text-charcoal"></p>
+          </div>
+          <div class="flex shrink-0 items-center gap-1">
+            <button id="announce-collapse" type="button" class="announce-icon-btn" aria-expanded="true" aria-controls="announce-banner-body" aria-label="Collapse announcement">
+              <i class="fa-solid fa-chevron-up" aria-hidden="true"></i>
+            </button>
+            <button id="announce-dismiss" type="button" class="announce-icon-btn" aria-label="Dismiss announcement">
+              <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+            </button>
           </div>
         </div>
       </div>
+
+      <div id="announce-compose" class="hidden mt-4 rounded-2xl border border-amber-200 bg-amber-50/60 p-4 sm:p-5">
+        <h3 class="mb-2 flex items-center gap-2 text-sm font-bold text-forest">
+          <i class="fa-solid fa-bullhorn text-amber-600" aria-hidden="true"></i> Broadcast an announcement
+        </h3>
+        <label for="announce-input" class="sr-only">Announcement message</label>
+        <textarea id="announce-input" rows="2" maxlength="280" placeholder="Type an update for participants (venue, schedule, links…)" class="w-full resize-none rounded-xl border border-sage bg-white p-3 text-sm text-charcoal placeholder:text-charcoal-soft/60 focus:border-forest focus:outline-none focus:ring-2 focus:ring-forest/15"></textarea>
+        <div class="mt-2 flex flex-wrap items-center justify-between gap-3">
+          <label class="inline-flex items-center gap-2 text-xs font-medium text-charcoal-soft">
+            <input id="announce-pin" type="checkbox" class="h-4 w-4 accent-amber-500" checked />
+            Pin as live banner
+          </label>
+          <div class="flex items-center gap-3">
+            <span id="announce-count" class="text-xs text-charcoal-soft" aria-live="polite">0 / 280</span>
+            <button id="announce-submit" type="button" class="btn-submit focus-visible:ring-2 focus-visible:ring-leaf-dark focus-visible:ring-offset-2">
+              <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
+              <span>Post</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div id="announce-history" class="mt-4">
+        <h3 class="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-charcoal-soft">
+          <i class="fa-solid fa-clock-rotate-left text-amber-600" aria-hidden="true"></i> Announcement History
+        </h3>
+        <ul id="announce-list" class="space-y-2"></ul>
+      </div>
+
     </div>
   </section>
 
   <main id="main" class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
     <div class="mb-10 max-w-2xl">
-      <h2 class="text-xl font-bold tracking-tight text-forest sm:text-2xl lg:text-3xl">Training Hub</h2>
-      <p class="mt-2 text-sm text-charcoal-soft sm:text-base">Everything you need for the workshop &mdash; schedule, downloadable material, resources and participant Q&amp;A.</p>
+      <h2 class="text-2xl font-bold tracking-tight text-forest sm:text-3xl">Training Hub</h2>
+      <p class="mt-3 text-charcoal-soft">Everything you need for the workshop &mdash; schedule, downloadable material, resources and participant Q&amp;A.</p>
     </div>
 
     <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
