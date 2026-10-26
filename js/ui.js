@@ -2,13 +2,11 @@
    js/ui.js
    -----------------------------------------------------------------
    Presentation layer: navigation state, mobile menu, FAQ accordion,
-   toast notifications and rendering of the Schedule / Materials /
-   Resources lists.
+   toast notifications and rendering of the Schedule / Resources
+   lists.
 
    ALL CONTENT BELOW IS SAMPLE DATA — edit the arrays to your course.
    ================================================================= */
-
-import { DRIVE_LINKS } from "./firebase-config.js";
 
 /* ----------------------------- DATA ---------------------------- */
 
@@ -108,25 +106,6 @@ const SCHEDULE = [
   }
 ];
 
-const MATERIALS = [
-  {
-    name: "Lecture Slides (all sessions)",
-    formats: ["PDF"],
-    size: "24 MB",
-    updated: "Updated Oct 2026",
-    icon: "fa-file-lines",
-    url: DRIVE_LINKS.slides
-  },
-  {
-    name: "Practice Datasets",
-    formats: ["FASTQ", "VCF", "CSV"],
-    size: "1.2 GB",
-    updated: "Updated Oct 2026",
-    icon: "fa-database",
-    url: DRIVE_LINKS.datasets
-  }
-];
-
 const RESOURCES = [
   { name: "FastQC", icon: "fa-solid fa-chart-line", url: "https://www.bioinformatics.babraham.ac.uk/projects/fastqc/" },
   { name: "fastp", icon: "fa-solid fa-filter", url: "https://github.com/OpenGene/fastp" },
@@ -162,7 +141,7 @@ const FAQS = [
   },
   {
     q: "Where are the session materials posted?",
-    a: "Slides and datasets are shared in the Session Materials card on Google Drive and updated as the workshop progresses."
+    a: "Slides and datasets are shared in the workshop Google Drive folder and updated as the workshop progresses."
   },
   {
     q: "How do I post a question to the instructor?",
@@ -278,34 +257,6 @@ function renderSchedule() {
       }
     });
   });
-}
-
-/* Each material is a standalone Google Drive button: the link action that
-   used to sit inside the row is now the row itself. */
-function renderMaterials() {
-  const list = document.getElementById("materials-list");
-  if (!list) return;
-  list.innerHTML = MATERIALS.map(
-    (m) => `
-    <li>
-      <a href="${m.url}" target="_blank" rel="noopener noreferrer" class="drive-button">
-        <span class="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-white text-forest">
-          <i class="fa-brands fa-google-drive text-lg" aria-hidden="true"></i>
-        </span>
-        <span class="min-w-0 flex-1">
-          <span class="block truncate text-sm font-semibold">${escapeHtml(m.name)}</span>
-          <span class="mt-1 flex flex-wrap items-center gap-1.5">
-            ${m.formats.map((f) => `<span class="rounded bg-white px-1.5 py-0.5 font-mono text-[0.7rem] font-semibold text-forest">${escapeHtml(f)}</span>`).join("")}
-            <span class="text-[0.7rem] opacity-70"><i class="fa-regular fa-clock mr-1" aria-hidden="true"></i>${escapeHtml(m.updated)}</span>
-          </span>
-        </span>
-        <span class="shrink-0 text-[0.72rem] font-semibold uppercase tracking-wide opacity-80">
-          <span class="sr-only sm:not-sr-only">Open in Google Drive</span>
-          <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
-        </span>
-      </a>
-    </li>`
-  ).join("");
 }
 
 function renderResources() {
@@ -503,7 +454,6 @@ export function escapeHtml(str = "") {
 
 export function initUI() {
   renderSchedule();
-  renderMaterials();
   renderResources();
   renderFaq();
   initNav();

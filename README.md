@@ -41,7 +41,7 @@ python3 -m http.server 5173
 
 > **You must serve the site over HTTP(S).** Opening `index.html` directly (a `file://` URL)
 > makes the browser block the ES modules with a CORS error, so every JavaScript-rendered section
-> (schedule, materials, resources, FAQ, and the Q&A feed) appears **empty**. Always use a local
+> (schedule, resources, FAQ, and the Q&A feed) appears **empty**. Always use a local
 > server (as above) or the deployed GitHub Pages URL — never open the file by double-clicking it.
 
 ## Going live — checklist
@@ -171,12 +171,16 @@ restrict writes, so both must match. When Firebase is disabled, the widget shows
 > Firestore free tier (50K reads / 20K writes / 20K deletes per day, 1 GiB storage) is far more
 > than a workshop needs, so **no billing account is required**.
 
-### 2. Google Drive material links
+### 2. Google Drive materials link
 
-In `js/firebase-config.js`, set the folder IDs in `DRIVE_LINKS`
-(`slides`, `datasets`). Use the folder/file ID from the Drive share URL,
-e.g. `https://drive.google.com/drive/folders/1AbC...XYZ`.
-Ensure each item is shared as **“Anyone with the link → Viewer”**.
+The **Materials** link in every page header opens the workshop Drive folder in a new
+browser tab. It is a direct link, not a page on this site:
+
+<https://drive.google.com/drive/folders/18ikaguxeKFY3zXP24IzGn53vNgI2AEvC?usp=drive_link>
+
+To change it, update the `href` on the Materials links in the HTML pages (`index.html`,
+`schedule.html`, `resources.html`, `faq.html`, `qa.html`, and `dashboard.html`).
+Ensure the folder is shared as **“Anyone with the link → Viewer”**.
 
 ### 3. Reply email notifications (Google Apps Script, free)
 
@@ -357,7 +361,7 @@ The `.nojekyll` file ensures `js/` and `css/` are served unchanged.
 | Schedule (Day 0–4 curriculum) | `SCHEDULE` array in `js/ui.js` |
 | Per-day sessions | `sessions` array in each `SCHEDULE` entry (`js/ui.js`) |
 | Workshop 1 Recap / Train the Trainers | `#recap` / `#trainers` sections in `index.html` |
-| Materials / Drive links | `MATERIALS` in `js/ui.js` + `DRIVE_LINKS` in `js/firebase-config.js` |
+| Materials / Drive link | `href` on the Materials links across the HTML pages |
 | Resources | `RESOURCES` in `js/ui.js` |
 | FAQs | `FAQS` in `js/ui.js` |
 | Participant Q&A page | `qa.html` + the `#qa` section inside it (header/footer are duplicated by design) |

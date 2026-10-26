@@ -42,20 +42,7 @@ export const firebaseConfig = {
 export const GAS_URL = "https://script.google.com/macros/s/YOUR_GAS_DEPLOYMENT_ID/exec";
 
 /* -----------------------------------------------------------------
-   3) MATERIAL / RESOURCE LINKS
-   -----------------------------------------------------------------
-   CHANGE THESE GOOGLE DRIVE URLS.
-   Each value is the folder/file ID from the Drive share URL,
-   e.g. https://drive.google.com/drive/folders/1AbC...XYZ
-   These are rendered by js/ui.js.
-   ----------------------------------------------------------------- */
-export const DRIVE_LINKS = {
-  slides:   "https://drive.google.com/drive/folders/1nMgrCca6IxbElVE0hFdGLLTOnXWWlB_1?usp=sharing",
-  datasets: "https://drive.google.com/drive/folders/1PsopTaeftxE5pCxy24MviFK6D6igxyAJ?usp=sharing"
-};
-
-/* -----------------------------------------------------------------
-   4) FEATURE FLAGS
+   3) FEATURE FLAGS
    -----------------------------------------------------------------
    `firebaseEnabled` is derived from the config: it is true once the
    `apiKey` no longer contains a `YOUR_` placeholder. When it is false,
