@@ -194,22 +194,16 @@ const DAY_ACCENT = {
   sage: "day-accent-sage"
 };
 
-/* Each day is a chronological list of sessions; break rows are muted. */
-function renderSessions(sessions = []) {
+/* Each day is a chronological table; break rows are muted. */
+function renderSessionRows(sessions = []) {
   return sessions
     .map(({ time, activity, lead }) => {
       const isBreak = /break/i.test(activity);
-      return `<li class="schedule-session${isBreak ? " schedule-session-break" : ""}">
-        <span class="schedule-session-time"><i class="fa-regular fa-clock mr-1.5" aria-hidden="true"></i>${escapeHtml(time)}</span>
-        <span class="schedule-session-body">
-          <span class="schedule-session-activity">${escapeHtml(activity)}</span>
-          ${
-            lead
-              ? `<span class="schedule-session-lead"><i class="fa-solid fa-user-tie mr-1.5" aria-hidden="true"></i><span class="sr-only">Resource person: </span>${escapeHtml(lead)}</span>`
-              : ""
-          }
-        </span>
-      </li>`;
+      return `<tr class="${isBreak ? "schedule-row-break" : ""}">
+        <td class="schedule-cell-time">${escapeHtml(time)}</td>
+        <td class="schedule-cell-topic">${escapeHtml(activity)}</td>
+        <td class="schedule-cell-speaker">${lead ? escapeHtml(lead) : '<span class="schedule-cell-empty">&mdash;</span>'}</td>
+      </tr>`;
     })
     .join("");
 }
@@ -220,27 +214,35 @@ function renderSchedule() {
   list.innerHTML = SCHEDULE.map((s, i) => {
     const accent = DAY_ACCENT[s.accent] || DAY_ACCENT.forest;
     return `
-    <li class="schedule-day ${accent}">
-      <article class="schedule-day-card" aria-labelledby="sched-title-${i}">
-        <header class="schedule-day-header">
-          <span class="schedule-day-marker" aria-hidden="true">D${i}</span>
-          <div class="min-w-0 flex-1">
-            <div class="schedule-day-topline">
-              <span class="schedule-day-date">${escapeHtml(s.day)}</span>
-              <span class="schedule-day-tag">${escapeHtml(s.tag)}</span>
-            </div>
-            <h3 id="sched-title-${i}" class="schedule-day-title">${escapeHtml(s.title)}</h3>
-            <div class="schedule-day-meta">
-              <span><i class="fa-regular fa-clock" aria-hidden="true"></i>${escapeHtml(s.time)}</span>
-              <span><i class="fa-solid fa-user-tie" aria-hidden="true"></i>In charge: ${escapeHtml(s.lead)}</span>
-            </div>
+    <section class="schedule-day ${accent}" aria-labelledby="sched-title-${i}">
+      <div class="schedule-day-heading">
+        <div class="min-w-0">
+          <div class="schedule-day-topline">
+            <span class="schedule-day-date">${escapeHtml(s.day)}</span>
+            <span class="schedule-day-tag">${escapeHtml(s.tag)}</span>
           </div>
-        </header>
-        <ol class="schedule-sessions">
-          ${renderSessions(s.sessions)}
-        </ol>
-      </article>
-    </li>`;
+          <h3 id="sched-title-${i}" class="schedule-day-title">${escapeHtml(s.title)}</h3>
+          <p class="schedule-day-meta">
+            <span><i class="fa-regular fa-clock" aria-hidden="true"></i>${escapeHtml(s.time)}</span>
+            <span><i class="fa-solid fa-user-tie" aria-hidden="true"></i>In charge: ${escapeHtml(s.lead)}</span>
+          </p>
+        </div>
+      </div>
+      <div class="schedule-table-wrap">
+        <table class="schedule-table" aria-labelledby="sched-title-${i}">
+          <thead>
+            <tr>
+              <th scope="col">Time</th>
+              <th scope="col">Topic</th>
+              <th scope="col">Speakers</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${renderSessionRows(s.sessions)}
+          </tbody>
+        </table>
+      </div>
+    </section>`;
   }).join("");
 }
 

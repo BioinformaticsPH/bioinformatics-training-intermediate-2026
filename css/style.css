@@ -173,7 +173,7 @@ input:focus-visible,
   color: var(--charcoal-soft);
 }
 
-/* ---------- Schedule timeline (static) ---------- */
+/* ---------- Schedule tables (classic 3-column grid) ---------- */
 .schedule-day {
   --day-accent: var(--leaf-dark);
   --day-accent-soft: rgba(135, 194, 50, 0.16);
@@ -191,37 +191,10 @@ input:focus-visible,
   --day-accent-soft: rgba(209, 219, 206, 0.5);
 }
 
-.schedule-day-card {
-  overflow: hidden;
-  border: 1px solid var(--sage-100);
-  border-radius: 1rem;
-  background: #fff;
-  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.03);
-  transition: box-shadow 0.25s ease;
-}
-.schedule-day-card:hover {
-  box-shadow: 0 8px 28px -18px rgba(11, 60, 35, 0.35);
-}
-
-.schedule-day-header {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  padding: 1.15rem 1.25rem 1rem;
-  border-bottom: 1px solid var(--sage-100);
-}
-.schedule-day-marker {
-  display: grid;
-  flex-shrink: 0;
-  place-items: center;
-  height: 3rem;
-  width: 3rem;
-  border-radius: 0.9rem;
-  background: var(--day-accent-soft);
-  color: var(--day-accent);
-  font-size: 0.8rem;
-  font-weight: 800;
-  letter-spacing: 0.03em;
+.schedule-day-heading {
+  margin-bottom: 0.7rem;
+  padding-left: 0.85rem;
+  border-left: 3px solid var(--day-accent);
 }
 .schedule-day-topline {
   display: flex;
@@ -266,131 +239,102 @@ input:focus-visible,
   color: var(--leaf-dark);
 }
 
-.schedule-sessions {
-  display: grid;
-  gap: 0;
-  margin: 0;
-  padding: 0.6rem 1.25rem 1rem;
-  list-style: none;
+.schedule-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--sage-100);
+  border-radius: 0.75rem;
+  background: #fff;
+  -webkit-overflow-scrolling: touch;
 }
-.schedule-session {
-  position: relative;
-  display: grid;
-  grid-template-columns: 6.7rem minmax(0, 1fr);
-  gap: 0.9rem;
-  padding: 0.65rem 0.75rem 0.65rem 2.2rem;
-  border-radius: 0.65rem;
-  transition: background-color 0.2s ease;
+.schedule-table {
+  width: 100%;
+  min-width: 36rem;
+  border-collapse: collapse;
+  font-size: 0.85rem;
 }
-.schedule-session:hover {
+.schedule-table th,
+.schedule-table td {
+  border: 1px solid var(--sage-100);
+  padding: 0.65rem 0.8rem;
+  text-align: left;
+  vertical-align: top;
+}
+.schedule-table thead th {
+  border-top: none;
+  background: var(--sage-50);
+  color: var(--charcoal-soft);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.schedule-table th:first-child,
+.schedule-table td:first-child {
+  border-left: none;
+  width: 22%;
+}
+.schedule-table th:last-child,
+.schedule-table td:last-child {
+  border-right: none;
+  width: 28%;
+}
+.schedule-table tbody tr:last-child td {
+  border-bottom: none;
+}
+.schedule-table tbody tr:hover {
   background: var(--sage-50);
 }
-.schedule-session::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 1rem;
-  width: 2px;
-  border-radius: 2px;
-  background: var(--sage-100);
-}
-.schedule-session:first-child::before {
-  top: 1.15rem;
-}
-.schedule-session:last-child::before {
-  bottom: calc(100% - 1.3rem);
-}
-.schedule-session:only-child::before {
-  display: none;
-}
-.schedule-session::after {
-  content: "";
-  position: absolute;
-  top: 1.08rem;
-  left: 1rem;
-  z-index: 1;
-  height: 0.55rem;
-  width: 0.55rem;
-  transform: translateX(-50%);
-  border-radius: 999px;
-  background: var(--day-accent);
-  box-shadow: 0 0 0 3px #fff;
-}
-.schedule-session-break::after {
-  background: #fff;
-  border: 2px solid var(--sage);
-}
-.schedule-session-time {
-  font-size: 0.72rem;
-  font-weight: 700;
-  line-height: 1.35;
+.schedule-cell-time {
   color: var(--forest);
+  font-size: 0.75rem;
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
-.schedule-session-body {
-  min-width: 0;
-}
-.schedule-session-activity {
-  display: block;
-  font-size: 0.85rem;
-  font-weight: 600;
-  line-height: 1.4;
+.schedule-cell-topic {
   color: var(--charcoal);
+  font-weight: 600;
 }
-.schedule-session-break .schedule-session-activity {
+.schedule-cell-speaker {
+  color: var(--charcoal-soft);
+  font-size: 0.78rem;
+}
+.schedule-cell-empty {
+  color: var(--sage);
+}
+.schedule-row-break td {
+  background: var(--sage-50);
+  color: var(--charcoal-soft);
+}
+.schedule-row-break .schedule-cell-time {
+  color: var(--charcoal-soft);
+  font-weight: 600;
+}
+.schedule-row-break .schedule-cell-topic {
   font-weight: 500;
-  color: var(--charcoal-soft);
-}
-.schedule-session-lead {
-  display: block;
-  margin-top: 0.15rem;
-  font-size: 0.72rem;
-  line-height: 1.4;
-  color: var(--charcoal-soft);
-}
-.schedule-session-lead i {
-  color: var(--leaf-dark);
 }
 
 @media (max-width: 640px) {
-  .schedule-day-header {
-    gap: 0.8rem;
-    padding: 1rem;
-  }
-  .schedule-day-marker {
-    height: 2.5rem;
-    width: 2.5rem;
-    border-radius: 0.75rem;
-    font-size: 0.72rem;
-  }
   .schedule-day-title {
     font-size: 1rem;
   }
-  .schedule-sessions {
-    padding: 0.4rem 0.75rem 0.75rem;
+  .schedule-day-heading {
+    padding-left: 0.7rem;
   }
-  .schedule-session {
-    grid-template-columns: 1fr;
-    gap: 0.15rem;
-    padding: 0.6rem 0.5rem 0.6rem 1.9rem;
+  .schedule-table {
+    min-width: 32rem;
+    font-size: 0.8rem;
   }
-  .schedule-session::before {
-    left: 0.85rem;
+  .schedule-table th,
+  .schedule-table td {
+    padding: 0.5rem 0.6rem;
   }
-  .schedule-session::after {
-    top: 0.9rem;
-    left: 0.85rem;
+  .schedule-cell-time {
+    font-size: 0.7rem;
   }
-  .schedule-session:first-child::before {
-    top: 1rem;
-  }
-  .schedule-session:last-child::before {
-    bottom: calc(100% - 1.15rem);
-  }
-  .schedule-session-time {
-    white-space: normal;
+  .schedule-cell-speaker {
+    font-size: 0.72rem;
   }
 }
 
