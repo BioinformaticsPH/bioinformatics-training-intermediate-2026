@@ -188,10 +188,10 @@ export function showToast(message, type = "info") {
 
 /* --------------------------- RENDERERS ------------------------- */
 
-const ACCENT_CLASS = {
-  forest: "bg-forest/10 text-forest",
-  leaf: "bg-leaf/20 text-forest",
-  sage: "bg-sage-100 text-charcoal-soft"
+const DAY_ACCENT = {
+  forest: "day-accent-forest",
+  leaf: "day-accent-leaf",
+  sage: "day-accent-sage"
 };
 
 /* Each day is a chronological list of sessions; break rows are muted. */
@@ -217,46 +217,31 @@ function renderSessions(sessions = []) {
 function renderSchedule() {
   const list = document.getElementById("schedule-list");
   if (!list) return;
-  list.innerHTML = SCHEDULE.map(
-    (s, i) => `
-    <li class="schedule-day">
-      <button type="button" id="sched-trigger-${i}" class="sched-trigger" aria-expanded="false" aria-controls="sched-panel-${i}">
-        <span class="min-w-0 flex-1 text-left">
-          <span class="block text-[11px] font-semibold uppercase tracking-wide text-charcoal-soft/70">${escapeHtml(s.day)}</span>
-          <span class="mt-0.5 block font-semibold text-forest">${escapeHtml(s.title)}</span>
-          <span class="mt-1 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-charcoal-soft">
-            <span><i class="fa-regular fa-clock mr-1" aria-hidden="true"></i>${escapeHtml(s.time)}</span>
-            <span><i class="fa-solid fa-user-tie mr-1" aria-hidden="true"></i>In charge: ${escapeHtml(s.lead)}</span>
-          </span>
-        </span>
-        <span class="flex shrink-0 items-center gap-2">
-          <span class="rounded-full px-2.5 py-1 text-[11px] font-bold uppercase ${ACCENT_CLASS[s.accent] || ACCENT_CLASS.forest}">${escapeHtml(s.tag)}</span>
-          <i class="fa-solid fa-chevron-down sched-chevron" aria-hidden="true"></i>
-        </span>
-      </button>
-      <div class="sched-panel" id="sched-panel-${i}" role="region" aria-labelledby="sched-trigger-${i}" data-open="false">
-        <div class="sched-panel-inner">
-          <ol class="schedule-sessions">
-            ${renderSessions(s.sessions)}
-          </ol>
-        </div>
-      </div>
-    </li>`
-  ).join("");
-
-  list.querySelectorAll(".sched-trigger").forEach((btn) => {
-    btn.addEventListener("click", () => togglePanel(btn, true));
-  });
-
-  /* Once a panel has finished expanding it is released to its natural
-     height, so late-loading fonts or longer content can never clip it. */
-  list.querySelectorAll(".sched-panel").forEach((panel) => {
-    panel.addEventListener("transitionend", (e) => {
-      if (e.propertyName === "max-height" && panel.getAttribute("data-open") === "true") {
-        panel.style.maxHeight = "none";
-      }
-    });
-  });
+  list.innerHTML = SCHEDULE.map((s, i) => {
+    const accent = DAY_ACCENT[s.accent] || DAY_ACCENT.forest;
+    return `
+    <li class="schedule-day ${accent}">
+      <article class="schedule-day-card" aria-labelledby="sched-title-${i}">
+        <header class="schedule-day-header">
+          <span class="schedule-day-marker" aria-hidden="true">D${i}</span>
+          <div class="min-w-0 flex-1">
+            <div class="schedule-day-topline">
+              <span class="schedule-day-date">${escapeHtml(s.day)}</span>
+              <span class="schedule-day-tag">${escapeHtml(s.tag)}</span>
+            </div>
+            <h3 id="sched-title-${i}" class="schedule-day-title">${escapeHtml(s.title)}</h3>
+            <div class="schedule-day-meta">
+              <span><i class="fa-regular fa-clock" aria-hidden="true"></i>${escapeHtml(s.time)}</span>
+              <span><i class="fa-solid fa-user-tie" aria-hidden="true"></i>In charge: ${escapeHtml(s.lead)}</span>
+            </div>
+          </div>
+        </header>
+        <ol class="schedule-sessions">
+          ${renderSessions(s.sessions)}
+        </ol>
+      </article>
+    </li>`;
+  }).join("");
 }
 
 function renderResources() {
@@ -347,37 +332,13 @@ function initChecklist() {
 
 /* --------------------------- INTERACTIONS ---------------------- */
 
-/* Generic accordion toggle shared by the schedule and FAQ panels.
-   `measure` animates the panel to its real content height — the schedule
-   blocks (notably Day 1) are far taller than any static cap. */
-function togglePanel(btn, measure = false) {
+/* Accordion toggle used by the FAQ panels. */
+function togglePanel(btn) {
   const expanded = btn.getAttribute("aria-expanded") === "true";
   const panel = document.getElementById(btn.getAttribute("aria-controls"));
   if (!panel) return;
   btn.setAttribute("aria-expanded", String(!expanded));
-
-  if (!measure) {
-    panel.setAttribute("data-open", String(!expanded));
-    return;
-  }
-
-  if (expanded) {
-    panel.style.maxHeight = `${panel.scrollHeight}px`;
-    requestAnimationFrame(() => {
-      panel.setAttribute("data-open", "false");
-      panel.style.maxHeight = "0px";
-    });
-  } else {
-    panel.setAttribute("data-open", "true");
-    panel.style.maxHeight = `${panel.scrollHeight}px`;
-  }
-}
-
-/* Keep open schedule panels fitted after a viewport change. */
-function syncPanelHeights() {
-  document.querySelectorAll('.sched-panel[data-open="true"]').forEach((p) => {
-    p.style.maxHeight = "none";
-  });
+  panel.setAttribute("data-open", String(!expanded));
 }
 
 function toggleFaq(btn) {
@@ -459,12 +420,6 @@ export function initUI() {
   initNav();
   initMobileMenu();
   initChecklist();
-
-  let resizeRaf = 0;
-  window.addEventListener("resize", () => {
-    cancelAnimationFrame(resizeRaf);
-    resizeRaf = requestAnimationFrame(syncPanelHeights);
-  });
 
   const year = document.querySelector("[data-year]");
   if (year) year.textContent = new Date().getFullYear();
