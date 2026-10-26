@@ -107,23 +107,41 @@ const SCHEDULE = [
 ];
 
 const RESOURCES = [
-  { name: "FastQC", icon: "fa-solid fa-chart-line", url: "https://www.bioinformatics.babraham.ac.uk/projects/fastqc/" },
-  { name: "fastp", icon: "fa-solid fa-filter", url: "https://github.com/OpenGene/fastp" },
-  { name: "bowtie2", icon: "fa-solid fa-align-left", url: "https://bowtie-bio.sourceforge.net/bowtie2/" },
-  { name: "SAMtools", icon: "fa-solid fa-dna", url: "http://www.htslib.org/doc/samtools.html" },
-  { name: "bcftools", icon: "fa-solid fa-sitemap", url: "http://www.htslib.org/doc/bcftools.html" },
-  { name: "bedtools", icon: "fa-solid fa-table-cells", url: "https://bedtools.readthedocs.io/" },
-  { name: "VCFtools", icon: "fa-solid fa-file-code", url: "https://vcftools.github.io/man_latest.html" },
-  { name: "IGV", icon: "fa-solid fa-dna", url: "https://igv.org/doc/" },
-  { name: "SnpEff", icon: "fa-solid fa-tag", url: "https://pcingola.github.io/SnpEff/" },
-  { name: "Conda", icon: "fa-solid fa-box", url: "https://docs.conda.io/" },
-  { name: "Mamba", icon: "fa-solid fa-cubes", url: "https://mamba.readthedocs.io/" },
-  { name: "Git", icon: "fa-brands fa-git-alt", url: "https://git-scm.com/doc" },
-  { name: "WSL2", icon: "fa-brands fa-windows", url: "https://learn.microsoft.com/en-us/windows/wsl/" },
-  { name: "Ollama", icon: "fa-solid fa-robot", url: "https://ollama.com/" },
-  { name: "Galaxy Platform", icon: "fa-solid fa-atom", url: "https://usegalaxy.org" },
-  { name: "nf-core Pipelines", icon: "fa-solid fa-diagram-project", url: "https://nf-co.re" },
-  { name: "Bioconductor", icon: "fa-solid fa-flask", url: "https://bioconductor.org" }
+  {
+    title: "Read Quality & Alignment",
+    description: "Assess raw reads, remove low-quality bases and adapters, and align sequencing data to reference genomes.",
+    items: [
+      { name: "FastQC", icon: "fa-solid fa-chart-line", url: "https://www.bioinformatics.babraham.ac.uk/projects/fastqc/" },
+      { name: "fastp", icon: "fa-solid fa-filter", url: "https://github.com/OpenGene/fastp" },
+      { name: "bowtie2", icon: "fa-solid fa-align-left", url: "https://bowtie-bio.sourceforge.net/bowtie2/" },
+      { name: "SAMtools", icon: "fa-solid fa-dna", url: "http://www.htslib.org/doc/samtools.html" }
+    ]
+  },
+  {
+    title: "Variant Calling, Annotation & Visualization",
+    description: "Call and filter variants, annotate their effects, and inspect results in a genome browser.",
+    items: [
+      { name: "bcftools", icon: "fa-solid fa-sitemap", url: "http://www.htslib.org/doc/bcftools.html" },
+      { name: "bedtools", icon: "fa-solid fa-table-cells", url: "https://bedtools.readthedocs.io/" },
+      { name: "VCFtools", icon: "fa-solid fa-file-code", url: "https://vcftools.github.io/man_latest.html" },
+      { name: "SnpEff", icon: "fa-solid fa-tag", url: "https://pcingola.github.io/SnpEff/" },
+      { name: "IGV", icon: "fa-solid fa-dna", url: "https://igv.org/doc/" }
+    ]
+  },
+  {
+    title: "Environment & Workflows",
+    description: "Set up reproducible computing environments and run scalable, community-maintained pipelines.",
+    items: [
+      { name: "Conda", icon: "fa-solid fa-box", url: "https://docs.conda.io/" },
+      { name: "Mamba", icon: "fa-solid fa-cubes", url: "https://mamba.readthedocs.io/" },
+      { name: "Git", icon: "fa-brands fa-git-alt", url: "https://git-scm.com/doc" },
+      { name: "WSL2", icon: "fa-brands fa-windows", url: "https://learn.microsoft.com/en-us/windows/wsl/" },
+      { name: "Ollama", icon: "fa-solid fa-robot", url: "https://ollama.com/" },
+      { name: "Galaxy Platform", icon: "fa-solid fa-atom", url: "https://usegalaxy.org" },
+      { name: "nf-core Pipelines", icon: "fa-solid fa-diagram-project", url: "https://nf-co.re" },
+      { name: "Bioconductor", icon: "fa-solid fa-flask", url: "https://bioconductor.org" }
+    ]
+  }
 ];
 
 const FAQS = [
@@ -250,17 +268,33 @@ function renderResources() {
   const list = document.getElementById("resources-list");
   if (!list) return;
   list.innerHTML = RESOURCES.map(
-    (r) => `
-    <li>
-      <a href="${r.url}" target="_blank" rel="noopener noreferrer"
-         class="flex h-full items-center gap-3 rounded-xl border border-sage-100 bg-white p-3 text-sm font-semibold text-forest transition hover:border-forest/25 hover:bg-paper">
-        <span class="grid h-9 w-9 place-items-center rounded-lg bg-sage-100 text-forest">
-          <i class="${r.icon}" aria-hidden="true"></i>
-        </span>
-        <span class="min-w-0 flex-1 truncate">${escapeHtml(r.name)}</span>
-        <i class="fa-solid fa-arrow-up-right-from-square text-xs text-sage" aria-hidden="true"></i>
-      </a>
-    </li>`
+    (group, i) => `
+    <section class="resource-group" aria-labelledby="resource-group-${i}">
+      <div class="resource-group-heading">
+        <div class="flex flex-wrap items-center gap-2">
+          <h3 id="resource-group-${i}" class="resource-group-title">${escapeHtml(group.title)}</h3>
+          <span class="resource-group-count">${group.items.length} tools</span>
+        </div>
+        <p class="resource-group-description">${escapeHtml(group.description)}</p>
+      </div>
+      <ul class="mt-3 grid gap-3 sm:grid-cols-2">
+        ${group.items
+          .map(
+            (r) => `
+        <li>
+          <a href="${r.url}" target="_blank" rel="noopener noreferrer"
+             class="flex h-full items-center gap-3 rounded-xl border border-sage-100 bg-white p-3 text-sm font-semibold text-forest transition hover:border-forest/25 hover:bg-paper">
+            <span class="grid h-9 w-9 place-items-center rounded-lg bg-sage-100 text-forest">
+              <i class="${r.icon}" aria-hidden="true"></i>
+            </span>
+            <span class="min-w-0 flex-1 truncate">${escapeHtml(r.name)}</span>
+            <i class="fa-solid fa-arrow-up-right-from-square text-xs text-sage" aria-hidden="true"></i>
+          </a>
+        </li>`
+          )
+          .join("")}
+      </ul>
+    </section>`
   ).join("");
 }
 
