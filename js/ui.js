@@ -59,7 +59,7 @@ const SCHEDULE = [
       { time: "12:00 – 13:00", activity: "Lunch Break", lead: "" },
       { time: "13:00 – 15:15", activity: "Hands-on", lead: "Frances Nikki Borja & Team" },
       { time: "15:15 – 15:30", activity: "Coffee Break", lead: "" },
-      { time: "15:30 – 16:45", activity: "SNP-Seek", lead: "Lord Hendrix Barboza" },
+      { time: "15:30 – 16:45", activity: "SNP-Seek", lead: "Lord Hendrix Barboza & Frances Nikki Borja" },
       { time: "16:45 – 17:00", activity: "Day 2 Wrap-up", lead: "Frances Nikki Borja" }
     ]
   },
