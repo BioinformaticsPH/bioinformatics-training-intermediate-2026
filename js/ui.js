@@ -41,7 +41,7 @@ const SCHEDULE = [
       { time: "13:00 – 15:00", activity: "Hands-on", lead: "Lord Hendrix Barboza & Team" },
       { time: "15:00 – 15:15", activity: "Coffee Break", lead: "" },
       { time: "15:15 – 16:45", activity: "Hands-on", lead: "Lord Hendrix Barboza & Team" },
-      { time: "16:45 – 17:00", activity: "Wrap Up of Day 1", lead: "Frances Nikki Borja" }
+      { time: "16:45 – 17:00", activity: "Wrap Up of Day 1", lead: "Lord Hendrix Barboza" }
     ]
   },
   {
@@ -53,11 +53,12 @@ const SCHEDULE = [
     lead: "Frances Nikki Borja",
     sessions: [
       { time: "08:30 – 09:00", activity: "Review & Q&A for Module 1", lead: "Frances Nikki Borja" },
-      { time: "09:00 – 10:15", activity: "Lecture: Variant Calling", lead: "Frances Nikki Borja" },
+      { time: "09:00 – 10:15", activity: "Tutorial: Mastering Genbank", lead: "Victor Jun Ulat" },
       { time: "10:15 – 10:30", activity: "Coffee Break", lead: "" },
-      { time: "10:30 – 12:00", activity: "Demo: Variant Calling Pipeline", lead: "Frances Nikki Borja" },
+      { time: "10:30 – 12:00", activity: "Lecture: Variant Calling", lead: "Frances Nikki Borja" },
       { time: "12:00 – 13:00", activity: "Lunch Break", lead: "" },
-      { time: "13:00 – 15:15", activity: "Hands-on", lead: "Frances Nikki Borja & Team" },
+      { time: "13:00 – 14:15", activity: "Demo: Variant Calling Pipeline", lead: "Frances Nikki Borja" },
+      { time: "14:15 – 15:15", activity: "Hands-on", lead: "Frances Nikki Borja & Team" },
       { time: "15:15 – 15:30", activity: "Coffee Break", lead: "" },
       { time: "15:30 – 16:45", activity: "SNP-Seek", lead: "Lord Hendrix Barboza & Frances Nikki Borja" },
       { time: "16:45 – 17:00", activity: "Day 2 Wrap-up", lead: "Frances Nikki Borja" }
@@ -74,14 +75,12 @@ const SCHEDULE = [
       { time: "08:30 – 09:00", activity: "Review and Q & A for Module 2", lead: "Frances Nikki Borja" },
       { time: "09:00 – 10:00", activity: "Lecture: Bioinformatics and Gen AI", lead: "Victor Jun Ulat" },
       { time: "10:00 – 10:15", activity: "Coffee Break", lead: "" },
-      { time: "10:15 – 10:45", activity: "Tutorial: Mastering Genbank", lead: "Frances Nikki Borja" },
-      { time: "10:45 – 12:00", activity: "Lecture: Comparative Genomics", lead: "Victor Jun Ulat" },
+      { time: "10:15 – 12:00", activity: "Lecture: Comparative Genomics", lead: "Victor Jun Ulat" },
       { time: "12:00 – 13:00", activity: "Lunch Break", lead: "" },
       { time: "13:00 – 15:00", activity: "Hands-on", lead: "Victor Jun Ulat & Team" },
       { time: "15:00 – 15:15", activity: "Coffee Break", lead: "" },
-      { time: "15:15 – 16:15", activity: "Hands-on", lead: "Victor Jun Ulat & Team" },
-      { time: "16:15 – 16:45", activity: "Project Assignments", lead: "Training Team" },
-      { time: "16:45 – 17:00", activity: "Day 3 Wrap-up", lead: "Victor Jun Ulat" }
+      { time: "15:15 – 16:45", activity: "Hands-on", lead: "Victor Jun Ulat & Team" },
+      { time: "16:45 – 17:00", activity: "Project Assignments", lead: "Training Team" }
     ]
   },
   {
